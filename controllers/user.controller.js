@@ -1,20 +1,20 @@
-// const {read} = require('../helper/user_helper');
+const {read} = require('../helper/user_helper');
 
 module.exports = {
     getUsers: (req, res) => {
-        // read().then(users => {
-        //     res.json(users)
-        // })
+        read().then(users => {
+            res.json(users);
+        })
     },
-    //
-    // getUserById: (req, res) => {
-    //     const {user_id} = req.params;
-    //
-    //     read().then(users => {
-    //         res.json(users[user_id - 1])
-    //     })
-    // },
-    //
+
+    getUserById: (req, res) => {
+        const {user_id} = req.params;
+
+        read().then(users => {
+            res.json(users[user_id - 1]);
+        })
+    },
+
     // createUser: (req, res) => {
     //     read().then(users => {
     //          users.push({...req.body, id: users.length + 1});
@@ -26,7 +26,7 @@ module.exports = {
     // const {user_id} = req.params;
     //     read().then(users => {
     //         res.json(users);
-    //         // delete(user_id);
+    //         delete(user_id);
     //     })
     // }
 }
