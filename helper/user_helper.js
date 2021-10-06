@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require("path");
 
 const readFilePromise = util.promisify(fs.readFile);
-const mkdirUsers = path.join(__dirname, 'dataBase', 'users.json');
+const mkdirUsers = path.join(process.cwd(), 'dataBase', 'users.json');
 
 async function read() {
     let buffer = await readFilePromise(mkdirUsers);
@@ -11,12 +11,12 @@ async function read() {
     console.log(buffer.toString());
 }
 
-async function write(value, data) {
-    await fs.writeFile(value, `${data}`, (err => {
-        if(err) throw err;
-    }))
-}
+// async function write(value, data) {
+//     await fs.writeFile(value, `${data}`, (err => {
+//         if(err) throw err;
+//     }))
+// }
 
-module.exports = {read, write};
+module.exports = {read};
 
 
