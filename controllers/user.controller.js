@@ -1,4 +1,4 @@
-const {read} = require('../helper/user_helper');
+const {read, write} = require('../helper/user_helper');
 
 module.exports = {
     getUsers: async (req, res) => {
@@ -15,21 +15,21 @@ module.exports = {
     },
 
     createUser: async (req, res) => {
-        const {user_id} = req.params;
         const users = await read();
+        users.push({...req.body, id: users.length + 1});
+        await write(users);
+        res.json(JSON.parse(users));
 
-        read().then(users => {
-             users.push({...req.body, id: users.length + 1});
-                 res.json(users[user_id - 1]);
-        })
+
     },
 
     deleteUserById: async (req, res) => {
-    const {user_id} = req.params;
-    const users = await read();
-    const value = [...data];
+        const {user_id} = req.params;
+        const users = await read();
+        const value = [...users];
 
-    value.slice(read, JSON.stringify(value));
-    res.json(value);
+        value.slice(user_id - 1, 1);
+        await write(JSON.stringify(value));
+        res.json(value);
     }
 }
