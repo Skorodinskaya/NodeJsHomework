@@ -20,11 +20,11 @@ module.exports = {
 
         read().then(users => {
              users.push({...req.body, id: users.length + 1});
-                 res.json(users);
+                 res.json(users[user_id - 1]);
         })
     },
 
-    deleteUserById: (req, res) => {
+    deleteUserById: async (req, res) => {
     const {user_id} = req.params;
     const users = await read();
     const value = [...data];
