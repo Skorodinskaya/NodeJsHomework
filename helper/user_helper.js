@@ -3,12 +3,12 @@ const fs = require('fs');
 const path = require("path");
 
 const readFilePromise = util.promisify(fs.readFile);
-const mkdirUsers = path.join(__dirname, 'dataBase', 'users.json');
+const mkdirUsers = path.join(process.cwd(), 'dataBase', 'users.json');
 
 async function read() {
-    let buffer = await readFilePromise(mkdirUsers);
+    const buffer = await readFilePromise(mkdirUsers);
 
-    console.log(buffer.toString());
+    return JSON.parse(buffer.toString());
 }
 
 async function write(value, data) {
