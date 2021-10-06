@@ -14,18 +14,22 @@ module.exports = {
 
     },
 
-    // createUser: (req, res) => {
-    //     read().then(users => {
-    //          users.push({...req.body, id: users.length + 1});
-    //              res.json(users);
-    //     })
-    // },
-    //
-    // deleteUserById: (req, res) => {
-    // const {user_id} = req.params;
-    //     read().then(users => {
-    //         res.json(users);
-    //         delete(user_id);
-    //     })
-    // }
+    createUser: async (req, res) => {
+        const {user_id} = req.params;
+        const users = await read();
+
+        read().then(users => {
+             users.push({...req.body, id: users.length + 1});
+                 res.json(users);
+        })
+    },
+
+    deleteUserById: (req, res) => {
+    const {user_id} = req.params;
+    const users = await read();
+    const value = [...data];
+
+    value.slice(read, JSON.stringify(value));
+    res.json(value);
+    }
 }

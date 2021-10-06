@@ -11,11 +11,11 @@ async function read() {
     return JSON.parse(buffer.toString());
 }
 
-// async function write(value, data) {
-//     await fs.writeFile(value, `${data}`, (err => {
-//         if(err) throw err;
-//     }))
-// }
+async function write(value, data) {
+    await fs.writeFile(value, `${data}`, (err => {
+        if(err) throw err;
+    }))
+}
 
 module.exports = {read};
 
