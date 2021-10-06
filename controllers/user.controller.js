@@ -1,18 +1,16 @@
 const {read} = require('../helper/user_helper');
 
 module.exports = {
-    getUsers: (req, res) => {
-        read().then(users => {
-            res.json(users);
-        })
+    getUsers: async (req, res) => {
+        const users = await read();
+        res.json(users);
     },
 
-    getUserById: (req, res) => {
+    getUserById: async (req, res) => {
         const {user_id} = req.params;
+        const users = await read();
+        res.json(users[user_id - 1]);
 
-        read().then(users => {
-            res.json(users[user_id - 1]);
-        })
     },
 
     // createUser: (req, res) => {

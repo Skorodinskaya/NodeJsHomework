@@ -4,7 +4,7 @@ const userController = require('../controllers/user.controller');
 
 router.get('/', userController.getUsers);
 // router.post('/', userController.createUser);
-
+//
 router.get('/:user_id', userController.getUserById);
 // router.delete('/:user_id', userController.deleteUserById);
 
