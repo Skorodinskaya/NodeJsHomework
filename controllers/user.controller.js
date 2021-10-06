@@ -3,6 +3,7 @@ const {read} = require('../helper/user_helper');
 module.exports = {
     getUsers: async (req, res) => {
         const users = await read();
+
         res.json(users);
     },
 
