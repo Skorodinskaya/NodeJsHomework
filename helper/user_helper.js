@@ -14,8 +14,9 @@ async function read() {
 }
 
 async function write(value) {
-    await writeFilePromise(mkdirUsers,JSON.stringify(value));
+    await writeFilePromise(mkdirUsers, JSON.stringify(value));
 }
+
 module.exports = {read, write};
 
 

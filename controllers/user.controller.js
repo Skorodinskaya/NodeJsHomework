@@ -3,7 +3,6 @@ const {read, write} = require('../helper/user_helper');
 module.exports = {
     getUsers: async (req, res) => {
         const users = await read();
-
         res.json(users);
     },
 
@@ -18,7 +17,7 @@ module.exports = {
         const users = await read();
         users.push({...req.body, id: users.length + 1});
         await write(users);
-        res.json(JSON.parse(users));
+        res.json(users);
 
 
     },
@@ -27,9 +26,8 @@ module.exports = {
         const {user_id} = req.params;
         const users = await read();
         const value = [...users];
-
         value.slice(user_id - 1, 1);
-        await write(JSON.stringify(value));
+        await write(value);
         res.json(value);
     }
 }

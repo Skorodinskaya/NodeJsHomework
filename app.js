@@ -8,6 +8,6 @@ const userRouter = require('./routers/user.router');
 
 app.use('/users', userRouter);
 
-app.listen(5000, ()=> {
+app.listen(5000, () => {
     console.log(`App listen 5000`)
 })
