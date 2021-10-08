@@ -1,5 +1,5 @@
 module.exports = {
-    loginController: (res, req) => {
+    loginController: (req, res) => {
         try {
             res.json(req.user);
         } catch (e) {

@@ -14,7 +14,7 @@ module.exports = {
         }
     },
 
-    requiredDataMiddleware: async (res, req, next) => {
+    requiredDataMiddleware: async (req, res, next) => {
         try {
             const {password, email} = req.body;
 
