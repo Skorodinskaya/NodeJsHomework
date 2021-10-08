@@ -7,7 +7,7 @@ module.exports = {
 
             res.json(users);
         } catch (e) {
-            res.json(e);
+            res.json(e.message);
         }
     },
 
@@ -18,7 +18,7 @@ module.exports = {
 
             res.json({user});
         } catch (e) {
-            res.json(e);
+            res.json(e.message);
         }
     },
 
@@ -28,11 +28,33 @@ module.exports = {
 
             res.json(newUser);
         } catch (e) {
-            res.json(e);
+            res.json(e.message);
         }
     },
 
-    // updateUser: (req, res) => {
-    //     res.json('Update user');
-    // }
+    updateUser: async (res, req) => {
+        try {
+            const {user_id} = req.params;
+
+            const user = await User.findByIdAndUpdate(user_id, req.body, {new: true});
+
+            res.json(user);
+
+        } catch (e) {
+            res.json(e.message);
+        }
+    },
+
+    deleteUser: async (res, req) => {
+        try {
+            const {user_id} = req.params;
+
+            const user = await User.deleteOne(user_id);
+
+            res(user);
+
+        } catch (e) {
+            res.json(e.message);
+        }
+    }
 };

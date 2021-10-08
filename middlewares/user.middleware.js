@@ -1,20 +1,34 @@
 const User = require('../dataBase/User');
 
 module.exports = {
-    createUserMiddleware: async (req, res, next) => {
+    emailMiddleware: async (req, res, next) => {
         try {
-            const userByEmail = await User.findOne({email: req.body.email});
+            const userEmail = await User.findOne({email: req.body.email});
 
-            if (userByEmail) {
+            if (userEmail) {
                 throw new Error('Email already exists');
             }
+            next();
+        } catch (e) {
+            res.json(e.message);
+        }
+    },
 
-            if (!req.body.name || !req.body.email || !req.body.password) {
-                throw new Error('Please fill required information');
+    requiredDataMiddleware: async (res, req, next) => {
+        try {
+            const {password, email} = req.body;
+
+            const userPassword = await User.find({password, email});
+
+            if (!userPassword) {
+                throw new Error('Please fill out all required fields');
             }
+
             next();
         } catch (e) {
             res.json(e.message);
         }
     }
 };
+
+

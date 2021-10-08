@@ -3,7 +3,7 @@ const {Schema, model} = require('mongoose');
 const userRoles = require("../configs/user-roles.enum");
 
 const userSchema = new Schema({
-    name:{
+    name: {
         type: String,
         required: true,
         trim: true
@@ -14,6 +14,13 @@ const userSchema = new Schema({
         required: true,
         trim: true
     },
+
+    password: {
+        type: String,
+        required: true,
+        trim: true
+    },
+
     role: {
         type: String,
         default: userRoles.USER,
