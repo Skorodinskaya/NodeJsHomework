@@ -8,6 +8,10 @@ module.exports = {
             if (userByEmail) {
                 throw new Error('Email already exists');
             }
+
+            if (!req.body.name || !req.body.email || !req.body.password) {
+                throw new Error('Please fill required information');
+            }
             next();
         } catch (e) {
             res.json(e.message);

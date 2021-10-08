@@ -11,9 +11,11 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
 const userRouter = require('./routes/user.router');
+const authRouter = require('./routes/auth.router');
 
 app.use('/users', userRouter);
+app.use('/auth', authRouter);
 
 app.listen( PORT,() => {
-    console.log('App listen 5000');
+    console.log('App listen');
 });
