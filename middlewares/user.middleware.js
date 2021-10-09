@@ -1,5 +1,4 @@
 const User = require('../dataBase/User');
-const {Types} = require("mongoose");
 
 module.exports = {
     emailMiddleware: async (req, res, next) => {
@@ -37,8 +36,9 @@ module.exports = {
 
     checkById: async (req, res, next) => {
         try {
-            const {id} = req.params;
-            const user = await User.exists({_id: Types.ObjectId(id)});
+            const {user_id} = req.params;
+
+            const user = await User.findById(user_id);
 
             if (!user) {
                 throw new Error('There is no user with this id');
