@@ -1,4 +1,5 @@
 const User = require('../dataBase/User');
+const passwordService = require('../service/password.service');
 
 module.exports = {
     getUsers: async (req, res) => {
@@ -25,7 +26,9 @@ module.exports = {
 
     createUser: async (req, res) => {
         try {
-            const newUser = await User.create(req.body);
+            const hashedPassword = await passwordService.hash(req.body.password);
+
+            const newUser = await User.create({...req.body, password: hashedPassword});
 
             res.json(newUser);
         } catch (e) {
@@ -49,7 +52,7 @@ module.exports = {
         try {
             const {user_id} = req.params;
 
-            await User.findByIdAndDelete({ _id: user_id });
+            await User.findByIdAndDelete({_id: user_id});
 
             res.sendStatus(204);
         } catch (e) {
