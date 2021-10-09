@@ -14,6 +14,7 @@ module.exports = {
     getUsersById: async (req, res) => {
         try {
             const {user_id} = req.params;
+
             const user = await User.findById(user_id);
 
             res.json({user});
@@ -32,27 +33,25 @@ module.exports = {
         }
     },
 
-    updateUser: async (res, req) => {
+    updateUser: async (req, res) => {
         try {
             const {user_id} = req.params;
 
             const user = await User.findByIdAndUpdate(user_id, req.body, {new: true});
 
             res.json(user);
-
         } catch (e) {
             res.json(e.message);
         }
     },
 
-    deleteUser: async (res, req) => {
+    deleteUser: async (req, res) => {
         try {
             const {user_id} = req.params;
 
-            const user = await User.deleteOne(user_id);
+            await User.findByIdAndDelete({ _id: user_id });
 
-            res(user);
-
+            res.sendStatus(204);
         } catch (e) {
             res.json(e.message);
         }
