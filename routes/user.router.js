@@ -6,8 +6,8 @@ const userMiddleware = require('../middlewares/user.middleware');
 router.get('/', userController.getUsers);
 router.post('/', userMiddleware.emailMiddleware, userController.createUser);
 
-router.get('/:user_id', userController.getUsersById);
-router.put('/:user_id', userController.updateUser);
-router.delete('/:user_id', userController.deleteUser);
+router.get('/:user_id', userMiddleware.checkById,userController.getUsersById);
+router.put('/:user_id', userMiddleware.checkById,userController.updateUser);
+router.delete('/:user_id', userMiddleware.checkById,userController.deleteUser);
 
 module.exports = router;
