@@ -1,7 +1,23 @@
 const User = require('../dataBase/User');
 const {Types} = require("mongoose");
+const userValidator = require('../validators/user.validator');
 
 module.exports = {
+    isUserBodyValid: (req, res, next) => {
+        try {
+            const {error, value} = userValidator.createUserValidator.valid(req.body);
+
+            if (error) {
+                throw new Error(error.detail[0].message);
+            }
+
+            req.body = value;
+
+            next();
+        } catch (e) {
+            res.json(e.message);
+        }
+    },
     emailMiddleware: async (req, res, next) => {
         try {
             const {email} = req.body;
@@ -37,8 +53,8 @@ module.exports = {
 
     checkById: async (req, res, next) => {
         try {
-            const {id} = req.params;
-            const user = await User.exists({_id: Types.ObjectId(id)});
+            const {user_id} = req.params;
+            const user = await User.exists({_id: Types.ObjectId(user_id)});
 
             if (!user) {
                 throw new Error('There is no user with this id');

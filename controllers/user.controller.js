@@ -18,7 +18,7 @@ module.exports = {
 
             const user = await User.findById(user_id);
 
-            res.json({user});
+            res.json(user);
         } catch (e) {
             res.json(e.message);
         }
