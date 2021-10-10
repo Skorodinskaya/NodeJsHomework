@@ -12,7 +12,7 @@ router.post(
 
 
 router.get('/:user_id', userMiddleware.checkById, userController.getUsersById);
-router.put('/:user_id', userMiddleware.isUserBodyValid, userMiddleware.checkById, userController.updateUser);
+router.put('/:user_id', userMiddleware.updateUserMiddleware, userMiddleware.checkById, userController.updateUser);
 router.delete('/:user_id', userMiddleware.checkById, userController.deleteUser);
 
 module.exports = router;
