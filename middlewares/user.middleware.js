@@ -18,7 +18,7 @@ module.exports = {
             res.json(e.message);
         }
     },
-    emailMiddleware: async (req, res, next) => {
+    createUserMiddleware: async (req, res, next) => {
         try {
             const {email} = req.body;
 

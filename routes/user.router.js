@@ -7,12 +7,12 @@ router.get('/', userController.getUsers);
 router.post(
     '/',
     userMiddleware.isUserBodyValid,
-    userMiddleware.emailMiddleware,
+    userMiddleware.createUserMiddleware,
     userController.createUser);
 
 
 router.get('/:user_id', userMiddleware.checkById,userController.getUsersById);
-router.put('/:user_id', userMiddleware.checkById,userController.updateUser);
+router.put('/:user_id', userMiddleware.isUserBodyValid,userMiddleware.checkById,userController.updateUser);
 router.delete('/:user_id', userMiddleware.checkById,userController.deleteUser);
 
 module.exports = router;

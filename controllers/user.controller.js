@@ -1,5 +1,6 @@
 const User = require('../dataBase/User');
 const passwordService = require('../service/password.service');
+const userUtil = require('../util/user.util');
 
 module.exports = {
     getUsers: async (req, res) => {
@@ -16,9 +17,11 @@ module.exports = {
         try {
             const {user_id} = req.params;
 
-            const user = await User.findById(user_id);
+            const user = await User.findById(user_id).lean();
 
-            res.json(user);
+            const normalizeUser = userUtil.userNormalizator(user);
+
+            res.json(normalizeUser);
         } catch (e) {
             res.json(e.message);
         }
