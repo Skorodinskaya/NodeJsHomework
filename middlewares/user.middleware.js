@@ -1,6 +1,6 @@
 const User = require('../dataBase/User');
 const {Types} = require("mongoose");
-const userValidator = require('../validators/user.validator');
+const {createUserValidator, updateUserValidator} = require('../validators/user.validator');
 
 module.exports = {
     createUserMiddleware: async (req, res, next) => {
@@ -21,10 +21,10 @@ module.exports = {
 
     isUserBodyValid: (req, res, next) => {
         try {
-            const {error, value} = userValidator.createUserValidator.valid(req.body);
+            const {error, value} = createUserValidator.validate(req.body);
 
             if (error) {
-                throw new Error(error.detail[0].message);
+                throw new Error(error.details[0].message);
             }
 
             req.body = value;
@@ -35,17 +35,15 @@ module.exports = {
         }
     },
 
-    requiredDataMiddleware: async (req, res, next) => {
+    updateUserMiddleware: (req, res, next) => {
         try {
-            const {password, email} = req.body;
+            const {error, value} = updateUserValidator.validate(req.body);
 
-            const userPassword = await User.findOne({password, email});
-
-            if (!userPassword) {
-                throw new Error('Please fill out all required fields');
+            if (error) {
+                throw new Error(error.details[0].message);
             }
 
-            req.user = userPassword;
+            req.body = value;
             next();
         } catch (e) {
             res.json(e.message);
@@ -61,6 +59,7 @@ module.exports = {
                 throw new Error('There is no user with this id');
             }
 
+            req.body = user;
             next();
         } catch (e) {
             res.json(e.message);

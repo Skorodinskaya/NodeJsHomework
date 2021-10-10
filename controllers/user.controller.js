@@ -1,13 +1,16 @@
 const User = require('../dataBase/User');
 const passwordService = require('../service/password.service');
 const userUtil = require('../util/user.util');
+const {userNormalizator} = require("../util/user.util");
 
 module.exports = {
     getUsers: async (req, res) => {
         try {
-            const users = await User.find().lean();
+            const users = await User.find({}).lean();
 
-            res.json(users);
+            const user = users.map(value => userNormalizator(value));
+
+            res.json(user);
         } catch (e) {
             res.json(e.message);
         }
