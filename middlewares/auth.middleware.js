@@ -23,7 +23,7 @@ module.exports = {
         try {
             const {email, password} = req.body;
 
-            const auth = await User.findOne({email}).lean();
+            const auth = await User.findOne({email});
 
             if (!auth) {
                 throw new Error('Wrong email or password');
