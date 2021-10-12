@@ -20,7 +20,6 @@ module.exports = {
             const {user_id} = req.params;
 
             const user = await User.findById(user_id);
-                // .select('-email');
 
             const normalizeUser = userNormalizator(user);
 
