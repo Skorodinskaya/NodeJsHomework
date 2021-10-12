@@ -47,7 +47,7 @@ module.exports = {
         try {
             const {user_id} = req.params;
 
-            const user = await User.findOneAndUpdate({_id: user_id}, {$set: {...req.body}});
+            const user = await User.findByIdAndUpdate(user_id, {$set: {...req.body}}, {new: true});
 
             res.json(user);
         } catch (e) {
