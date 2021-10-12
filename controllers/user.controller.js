@@ -5,7 +5,7 @@ const {userNormalizator} = require("../util/user.util");
 module.exports = {
     getUsers: async (req, res) => {
         try {
-            const users = await User.find({}).lean();
+            const users = await User.find({});
 
             const user = users.map(value => userNormalizator(value));
 
@@ -19,7 +19,7 @@ module.exports = {
         try {
             const {user_id} = req.params;
 
-            const user = await User.findById(user_id).lean();
+            const user = await User.findById(user_id);
 
             const normalizeUser = userNormalizator(user);
 
@@ -47,7 +47,7 @@ module.exports = {
         try {
             const {user_id} = req.params;
 
-            const user = await User.findByIdAndUpdate(user_id, {$set: {name: req.body.name}});
+            const user = await User.findOneAndUpdate({_id: user_id}, {$set: {...req.body}});
 
             res.json(user);
         } catch (e) {

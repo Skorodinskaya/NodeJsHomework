@@ -53,13 +53,14 @@ module.exports = {
     checkById: async (req, res, next) => {
         try {
             const {user_id} = req.params;
+
             const user = await User.exists({_id: Types.ObjectId(user_id)});
 
             if (!user) {
                 throw new Error('There is no user with this id');
             }
 
-            req.body = user;
+            req.user = user;
             next();
         } catch (e) {
             res.json(e.message);
