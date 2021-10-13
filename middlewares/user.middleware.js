@@ -1,6 +1,7 @@
 const User = require('../dataBase/User');
 const {Types} = require("mongoose");
-const {createUserValidator, updateUserValidator} = require('../validators/user.validator');
+const {userValidator} = require('../validators');
+const ErrorHandler = require("../errors/ErrorHandler");
 
 module.exports = {
     createUserMiddleware: async (req, res, next) => {
@@ -10,43 +11,46 @@ module.exports = {
             const userEmail = await User.findOne({email});
 
             if (userEmail) {
-                throw new Error('Email already exists');
+                return next({
+                    message: 'Email already exists',
+                    status: 404
+                });
             }
 
             next();
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
     isUserBodyValid: (req, res, next) => {
         try {
-            const {error, value} = createUserValidator.validate(req.body);
+            const {error, value} = userValidator.createUserValidator.validate(req.body);
 
             if (error) {
-                throw new Error(error.details[0].message);
+                throw new ErrorHandler('Wrong email or password', 404);
             }
 
             req.body = value;
 
             next();
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
     updateUserMiddleware: (req, res, next) => {
         try {
-            const {error, value} = updateUserValidator.validate(req.body);
+            const {error, value} = userValidator.updateUserValidator.validate(req.body);
 
             if (error) {
-                throw new Error(error.details[0].message);
+                throw new ErrorHandler(error.details[0].message, 404);
             }
 
             req.body = value;
             next();
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
@@ -57,13 +61,13 @@ module.exports = {
             const user = await User.exists({_id: Types.ObjectId(user_id)});
 
             if (!user) {
-                throw new Error('There is no user with this id');
+                throw new ErrorHandler('There is no user with this id', 404);
             }
 
             req.user = user;
             next();
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     }
 };
