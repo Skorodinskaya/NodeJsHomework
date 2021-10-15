@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const {userController} = require('../controllers');
 const {userMiddleware} = require('../middlewares');
-const {ADMIN} = require("../configs/user-roles.enum");
+const {ADMIN} = require('../configs/user-roles.enum');
 
 router.get('/', userController.getUsers);
 router.post(

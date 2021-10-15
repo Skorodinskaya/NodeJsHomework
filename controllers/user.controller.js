@@ -1,6 +1,6 @@
 const User = require('../dataBase/User');
 const passwordService = require('../service/password.service');
-const {userNormalizator} = require("../util/user.util");
+const {userNormalizator} = require('../util/user.util');
 
 module.exports = {
     getUsers: async (req, res, next) => {
@@ -20,7 +20,6 @@ module.exports = {
             const {user_id} = req.params;
 
             const user = await User.findById(user_id);
-            // .select('-password')
 
             const normalizeUser = userNormalizator(user);
 
@@ -50,7 +49,9 @@ module.exports = {
 
             const user = await User.findByIdAndUpdate(user_id, {$set: {...req.body}}, {new: true});
 
-            res.json(user);
+            const normalizeNewUser = userNormalizator(user);
+
+            res.json(normalizeNewUser);
         } catch (e) {
             next(e);
         }

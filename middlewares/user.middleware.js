@@ -1,7 +1,7 @@
 const User = require('../dataBase/User');
-const {Types} = require("mongoose");
+const {Types} = require('mongoose');
 const {userValidator} = require('../validators');
-const ErrorHandler = require("../errors/ErrorHandler");
+const ErrorHandler = require('../errors/ErrorHandler');
 
 module.exports = {
     createUserMiddleware: async (req, res, next) => {

@@ -1,7 +1,7 @@
 const User = require('../dataBase/User');
 const {authValidator} = require('../validators');
-const {compare} = require("../service/password.service");
-const ErrorHandler = require("../errors/ErrorHandler");
+const {compare} = require('../service/password.service');
+const ErrorHandler = require('../errors/ErrorHandler');
 
 module.exports = {
     isAuthValid: (req, res, next) => {
