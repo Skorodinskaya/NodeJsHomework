@@ -61,9 +61,9 @@ module.exports = {
         try {
             const {user_id} = req.params;
 
-            await User.findByIdAndDelete({_id: user_id});
+            const deletedUser = await User.findByIdAndDelete({_id: user_id});
 
-            res.sendStatus(204);
+            res.json(deletedUser);
         } catch (e) {
             next(e);
         }

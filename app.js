@@ -12,13 +12,14 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 const {authRouter, userRouter} = require('./routes');
+const {DEFAULT_STATUS_ERR} = require("./configs/constants");
 
 app.use('/users', userRouter);
 app.use('/auth', authRouter);
 // eslint-disable-next-line no-unused-vars
 app.use('*', (err, req, res, next) => {
     res
-        .status(err.status || 500)
+        .status(err.status || DEFAULT_STATUS_ERR)
         .json({
             message: err.message
         });

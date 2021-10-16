@@ -1,7 +1,8 @@
 const User = require('../dataBase/User');
 const {Types} = require('mongoose');
 const {userValidator} = require('../validators');
-const ErrorHandler = require('../errors/ErrorHandler');
+const {ErrorHandler, EMAIL_ALREADY_EXISTS, USER_IS_NOT_FOUND, UPDATE_ONLY_NAME, ACCESS_DENIED, WRONG_EMAIL_OR_PASSWORD,
+} = require('../errors');
 
 module.exports = {
     createUserMiddleware: async (req, res, next) => {
@@ -11,10 +12,7 @@ module.exports = {
             const userEmail = await User.findOne({email});
 
             if (userEmail) {
-                return next({
-                    message: 'Email already exists',
-                    status: 404
-                });
+                throw new ErrorHandler(EMAIL_ALREADY_EXISTS.message, EMAIL_ALREADY_EXISTS.status);
             }
 
             next();
@@ -28,7 +26,7 @@ module.exports = {
             const {error, value} = userValidator.createUserValidator.validate(req.body);
 
             if (error) {
-                throw new ErrorHandler('Wrong email or password', 404);
+                throw new ErrorHandler(WRONG_EMAIL_OR_PASSWORD.message, WRONG_EMAIL_OR_PASSWORD.status);
             }
 
             req.body = value;
@@ -44,7 +42,7 @@ module.exports = {
             const {error, value} = userValidator.updateUserValidator.validate(req.body);
 
             if (error) {
-                throw new ErrorHandler(error.details[0].message, 404);
+                throw new ErrorHandler(UPDATE_ONLY_NAME.message, UPDATE_ONLY_NAME.status);
             }
 
             req.body = value;
@@ -61,7 +59,7 @@ module.exports = {
             const user = await User.exists({_id: Types.ObjectId(user_id)});
 
             if (!user) {
-                throw new ErrorHandler('There is no user with this id', 404);
+                throw new ErrorHandler(USER_IS_NOT_FOUND.message, USER_IS_NOT_FOUND.status);
             }
 
             req.user = user;
@@ -76,7 +74,7 @@ module.exports = {
             const {role} = req.user;
 
             if (!roleArr.includes(role)) {
-                throw new Error('Access denied');
+                throw new ErrorHandler (ACCESS_DENIED.message, ACCESS_DENIED.status);
             }
 
             next();
