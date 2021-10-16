@@ -7,9 +7,9 @@ module.exports = {
         try {
             const users = await User.find({});
 
-            const user = users.map(value => userNormalizator(value));
+            const normalizedUsers = users.map(value => userNormalizator(value));
 
-            res.json(user);
+            res.json(normalizedUsers);
         } catch (e) {
             next(e);
         }
@@ -61,7 +61,7 @@ module.exports = {
         try {
             const {user_id} = req.params;
 
-            const deletedUser = await User.findByIdAndDelete({_id: user_id});
+            const deletedUser = await User.findByIdAndDelete(user_id);
 
             res.json(deletedUser);
         } catch (e) {

@@ -5,6 +5,7 @@ const {userMiddleware} = require('../middlewares');
 const {ADMIN} = require('../configs/user-roles.enum');
 
 router.get('/', userController.getUsers);
+
 router.post(
     '/',
     userMiddleware.isUserBodyValid,
