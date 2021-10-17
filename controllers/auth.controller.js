@@ -36,5 +36,28 @@ module.exports = {
         } catch (e) {
             next(e);
         }
-    }
+    },
+
+    refreshToken: async (req, res, next) => {
+        try {
+            const user = req.user;
+
+            const tokenPair = jwtService.generateTokenPair();
+
+            const normalizedUser = userNormalizator(user);
+
+            await O_Auth.create({
+                ...tokenPair,
+                user_id: normalizedUser._id
+            });
+
+            res.json({
+                user: normalizedUser,
+                ...tokenPair
+            });
+        } catch (e) {
+            next(e);
+        }
+    },
+
 };

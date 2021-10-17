@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 const {authRouter, userRouter} = require('./routes');
-const {DEFAULT_STATUS_ERR} = require("./configs/constants");
+const {DEFAULT_STATUS_ERR} = require('./configs/constants');
 
 app.use('/users', userRouter);
 app.use('/auth', authRouter);

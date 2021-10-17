@@ -8,4 +8,7 @@ authRouter.post('/login',
     authMiddleware.authLoginMiddleware,
     authController.loginController);
 
+authRouter.post('./logout', authController.logout);
+authRouter.post('./refresh', authMiddleware.checkRefreshToken,authController.refreshToken);
+
 module.exports = authRouter;
