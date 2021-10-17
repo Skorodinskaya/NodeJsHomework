@@ -15,18 +15,10 @@ module.exports = {
         }
     },
 
-    getUsersById: async (req, res, next) => {
-        try {
-            const {user_id} = req.params;
+    getUsersById: (req, res) => {
+        const user = req.user;
 
-            const user = await User.findById(user_id);
-
-            const normalizeUser = userNormalizator(user);
-
-            res.json(normalizeUser);
-        } catch (e) {
-            next(e);
-        }
+        res.json(user);
     },
 
     createUser: async (req, res, next) => {

@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const {MONGO_CONNECT_URL, PORT} = require('./configs/config');
+const {MONGO_CONNECT_URL, PORT,DEFAULT_STATUS_ERR} = require('./configs');
 
 const app = express();
 
@@ -12,7 +12,6 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 const {authRouter, userRouter} = require('./routes');
-const {DEFAULT_STATUS_ERR} = require("./configs/constants");
 
 app.use('/users', userRouter);
 app.use('/auth', authRouter);
