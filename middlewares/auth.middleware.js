@@ -1,7 +1,8 @@
 const User = require('../dataBase/User');
 const {authValidator} = require('../validators');
-const {compare} = require('../service/password.service');
+const {compare, jwtService} = require('../service');
 const {ErrorHandler, WRONG_EMAIL_OR_PASSWORD} = require('../errors');
+const {AUTHORIZATION} = require('../configs');
 
 module.exports = {
     isAuthValid: (req, res, next) => {
@@ -33,6 +34,18 @@ module.exports = {
             await compare(password, auth.password);
 
             req.user = auth;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    checkAccessToken: async (req, res, next) => {
+        try {
+            const token = req.get(AUTHORIZATION);
+
+            await jwtService.verifyToken(token);
+
             next();
         } catch (e) {
             next(e);

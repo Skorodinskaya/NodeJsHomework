@@ -22,5 +22,10 @@ module.exports = {
     UPDATE_ONLY_NAME: {
         message: 'You can update your name',
         status: 400
+    },
+
+    INVALID_TOKEN: {
+        message: 'Invalid token',
+        status: 401
     }
 };
