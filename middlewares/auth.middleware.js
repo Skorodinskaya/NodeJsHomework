@@ -1,8 +1,9 @@
 const User = require('../dataBase/User');
 const {authValidator} = require('../validators');
 const {compare, jwtService} = require('../service');
-const {ErrorHandler, WRONG_EMAIL_OR_PASSWORD} = require('../errors');
+const {ErrorHandler, WRONG_EMAIL_OR_PASSWORD, INVALID_TOKEN} = require('../errors');
 const {AUTHORIZATION} = require('../configs');
+const O_Auth = require('../dataBase/O_Auth');
 
 module.exports = {
     isAuthValid: (req, res, next) => {
@@ -44,7 +45,15 @@ module.exports = {
         try {
             const token = req.get(AUTHORIZATION);
 
+            if (!token) {
+                throw new ErrorHandler(INVALID_TOKEN);
+            }
+
             await jwtService.verifyToken(token);
+
+            const newVar = await O_Auth.findOne({access_token: token});
+
+            console.log(newVar);
 
             next();
         } catch (e) {
