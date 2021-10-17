@@ -45,7 +45,7 @@ module.exports = {
             const token = req.get(AUTHORIZATION);
 
             if (!token) {
-                throw new ErrorHandler(INVALID_TOKEN);
+                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
             }
 
             await jwtService.verifyToken(token);
@@ -55,7 +55,7 @@ module.exports = {
                 .populate('user_id');
 
             if (!tokenResponse) {
-                throw new ErrorHandler(INVALID_TOKEN);
+                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
             }
 
             req.user = tokenResponse.user_id;
@@ -71,7 +71,7 @@ module.exports = {
             const token = req.get(AUTHORIZATION);
 
             if (!token) {
-                throw new ErrorHandler(INVALID_TOKEN);
+                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
             }
 
             await jwtService.verifyToken(token, REFRESH);
@@ -81,12 +81,30 @@ module.exports = {
                 .populate('user_id');
 
             if (!tokenResponse) {
-                throw new ErrorHandler(INVALID_TOKEN);
+                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
             }
 
             await O_Auth.remove({refresh_token: token});
 
             req.user = tokenResponse.user_id;
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    userLogoutMiddleware: async (req, res, next) => {
+        try {
+            const token = req.get(AUTHORIZATION);
+
+            if (!token) {
+                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
+            }
+
+            await jwtService.verifyToken(token);
+
+            await O_Auth.deleteOne({access_token: token});
 
             next();
         } catch (e) {

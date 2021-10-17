@@ -1,4 +1,4 @@
-const {User, O_Auth} = require('../dataBase');
+const {O_Auth} = require('../dataBase');
 const {userNormalizator} = require('../util/user.util');
 const {jwtService} = require('../service');
 
@@ -26,12 +26,9 @@ module.exports = {
         }
     },
 
-    logout: async (req, res, next) => {
+    logout: (req, res, next) => {
         try {
-            const users = await User.find();
-
-            res.json(users);
-
+            res.json('The logout was done ');
         } catch (e) {
             next(e);
         }
@@ -58,5 +55,4 @@ module.exports = {
             next(e);
         }
     },
-
 };
