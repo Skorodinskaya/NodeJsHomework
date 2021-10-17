@@ -61,5 +61,15 @@ module.exports = {
         } catch (e) {
             next(e);
         }
+    },
+
+    deleteAccount: (req, res, next) => {
+        try {
+            const user = req.user;
+
+            res.json(`${user.name}, your account has been deleted`);
+        }catch (e) {
+            next(e);
+        }
     }
 };
