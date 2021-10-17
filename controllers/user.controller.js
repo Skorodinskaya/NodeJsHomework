@@ -18,7 +18,9 @@ module.exports = {
     getUsersById: (req, res) => {
         const user = req.user;
 
-        res.json(user);
+        const normalizedUser = userNormalizator(user);
+
+        res.json(normalizedUser);
     },
 
     createUser: async (req, res, next) => {
