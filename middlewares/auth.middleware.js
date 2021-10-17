@@ -1,10 +1,8 @@
-const User = require('../dataBase/User');
+const {User, O_Auth} = require('../dataBase');
 const {authValidator} = require('../validators');
 const {compare, jwtService} = require('../service');
 const {ErrorHandler, WRONG_EMAIL_OR_PASSWORD, INVALID_TOKEN} = require('../errors');
-const {AUTHORIZATION} = require('../configs');
-const O_Auth = require('../dataBase/O_Auth');
-const {REFRESH} = require('../configs');
+const {AUTHORIZATION, REFRESH} = require('../configs');
 
 module.exports = {
     isAuthValid: (req, res, next) => {

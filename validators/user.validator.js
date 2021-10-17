@@ -1,7 +1,6 @@
 const Joi = require('joi');
 
-const {EMAIL_REGEXP, PASSWORD_REGEXP} = require('../configs/constants');
-const userRoles = require('../configs/user-roles.enum');
+const {EMAIL_REGEXP, PASSWORD_REGEXP, userRoles} = require('../configs');
 
 const createUserValidator = Joi.object({
     name: Joi

@@ -1,4 +1,4 @@
-const User = require('../dataBase/User');
+const {User} = require('../dataBase');
 const {passwordService} = require('../service');
 const {userNormalizator} = require('../util/user.util');
 
@@ -15,18 +15,12 @@ module.exports = {
         }
     },
 
-    getUsersById: async (req, res, next) => {
-        try {
-            const {user_id} = req.params;
+    getUsersById: (req, res) => {
+        const user = req.user;
 
-            const user = await User.findById(user_id);
+        const normalizedUser = userNormalizator(user);
 
-            const normalizeUser = userNormalizator(user);
-
-            res.json(normalizeUser);
-        } catch (e) {
-            next(e);
-        }
+        res.json(normalizedUser);
     },
 
     createUser: async (req, res, next) => {

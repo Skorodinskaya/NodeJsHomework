@@ -1,4 +1,4 @@
-const User = require('../dataBase/User');
+const {User} = require('../dataBase');
 const {userValidator} = require('../validators');
 const {ErrorHandler, EMAIL_ALREADY_EXISTS, USER_IS_NOT_FOUND, UPDATE_ONLY_NAME, ACCESS_DENIED} = require('../errors');
 
