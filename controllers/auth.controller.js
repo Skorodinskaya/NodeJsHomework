@@ -1,8 +1,6 @@
 const {O_Auth} = require('../dataBase');
 const {userNormalizator} = require('../util/user.util');
 const {jwtService} = require('../service');
-const {AUTHORIZATION} = require('../configs');
-const {ErrorHandler, INVALID_TOKEN} = require('../errors');
 
 
 module.exports = {
@@ -30,17 +28,11 @@ module.exports = {
 
     logout: async (req, res, next) => {
         try {
-            const token = req.get(AUTHORIZATION);
+            const {user} = req;
 
-            if (!token) {
-                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
-            }
+            await O_Auth.deleteOne({user_id: user._id});
 
-            await jwtService.verifyToken(token);
-
-            await O_Auth.deleteOne({access_token: token});
-
-            next();
+            res.json('The logout has been done.');
         } catch (e) {
             next(e);
         }
