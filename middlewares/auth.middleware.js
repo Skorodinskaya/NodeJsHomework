@@ -93,22 +93,4 @@ module.exports = {
             next(e);
         }
     },
-
-    userLogoutMiddleware: async (req, res, next) => {
-        try {
-            const token = req.get(AUTHORIZATION);
-
-            if (!token) {
-                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
-            }
-
-            await jwtService.verifyToken(token);
-
-            await O_Auth.deleteOne({access_token: token});
-
-            next();
-        } catch (e) {
-            next(e);
-        }
-    }
 };

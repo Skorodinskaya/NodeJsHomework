@@ -28,11 +28,7 @@ router.delete(
     '/:user_id',
     userMiddleware.checkById,
     userMiddleware.checkRole([ADMIN]),
+    authMiddleware.checkAccessToken,
     userController.deleteUser);
 
-router.delete(
-    '/',
-    authMiddleware.checkAccessToken,
-    userController.deleteAccount
-);
 module.exports = router;

@@ -11,7 +11,7 @@ authRouter.post(
 
 authRouter.post(
     '/logout',
-    authMiddleware.userLogoutMiddleware,
+    authMiddleware.checkAccessToken,
     authController.logout);
 
 authRouter.post(
