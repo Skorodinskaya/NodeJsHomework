@@ -1,4 +1,4 @@
-const emailActionEnum = require('../configs/email-actions.enum');
+const emailActionEnum = require('../configs');
 
 module.exports = {
     [emailActionEnum.CREATED]: {
