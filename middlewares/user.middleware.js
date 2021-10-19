@@ -1,6 +1,5 @@
 const {User} = require('../dataBase');
-const {userValidator} = require('../validators');
-const {ErrorHandler, EMAIL_ALREADY_EXISTS, USER_IS_NOT_FOUND, UPDATE_ONLY_NAME, ACCESS_DENIED} = require('../errors');
+const {ErrorHandler, EMAIL_ALREADY_EXISTS, USER_IS_NOT_FOUND, ACCESS_DENIED} = require('../errors');
 
 module.exports = {
     createUserMiddleware: async (req, res, next) => {
@@ -19,31 +18,16 @@ module.exports = {
         }
     },
 
-    isUserBodyValid: (req, res, next) => {
+    isUserBodyValid: (validator) => async (req, res, next) => {
         try {
-            const {error, value} = userValidator.createUserValidator.validate(req.body);
+            const {error, value} = await validator.validate(req.body);
 
             if (error) {
-                throw new ErrorHandler(error.details[0].message, 400);
+                throw new ErrorHandler(error.details[0].message,400);
             }
 
             req.body = value;
 
-            next();
-        } catch (e) {
-            next(e);
-        }
-    },
-
-    updateUserMiddleware: (req, res, next) => {
-        try {
-            const {error, value} = userValidator.updateUserValidator.validate(req.body);
-
-            if (error) {
-                throw new ErrorHandler(UPDATE_ONLY_NAME.message, UPDATE_ONLY_NAME.status);
-            }
-
-            req.body = value;
             next();
         } catch (e) {
             next(e);

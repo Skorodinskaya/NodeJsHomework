@@ -40,16 +40,13 @@ module.exports = {
 
     refreshToken: async (req, res, next) => {
         try {
-            const user = req.user;
+            const {user, refresh_token} = req;
 
             const tokenPair = jwtService.generateTokenPair();
 
             const normalizedUser = userNormalizator(user);
 
-            await O_Auth.create({
-                ...tokenPair,
-                user_id: normalizedUser._id
-            });
+            await O_Auth.findOneAndUpdate({refresh_token}, tokenPair);
 
             res.json({
                 user: normalizedUser,

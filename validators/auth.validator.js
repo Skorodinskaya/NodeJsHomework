@@ -13,7 +13,7 @@ const authValidator = Joi.object({
         .string()
         .required()
         .trim()
-        .regex(PASSWORD_REGEXP)
+        .regex(PASSWORD_REGEXP),
 });
 
 module.exports = {
