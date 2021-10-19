@@ -1,6 +1,6 @@
 const {User, O_Auth} = require('../dataBase');
 const {authValidator} = require('../validators');
-const {compare, jwtService} = require('../service');
+const {passwordService, jwtService} = require('../service');
 const {ErrorHandler, WRONG_EMAIL_OR_PASSWORD, INVALID_TOKEN} = require('../errors');
 const {AUTHORIZATION, REFRESH} = require('../configs');
 
@@ -31,7 +31,7 @@ module.exports = {
                 throw new ErrorHandler(WRONG_EMAIL_OR_PASSWORD.message, WRONG_EMAIL_OR_PASSWORD.status);
             }
 
-            await compare(password, auth.password);
+            await passwordService.compare(password, auth.password);
 
             req.user = auth;
             next();
