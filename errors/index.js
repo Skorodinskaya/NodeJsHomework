@@ -3,7 +3,8 @@ const {
     EMAIL_ALREADY_EXISTS,
     USER_IS_NOT_FOUND,
     WRONG_EMAIL_OR_PASSWORD,
-    INVALID_TOKEN
+    INVALID_TOKEN,
+    WRONG_TEMPLATE
 } = require('./error.messages');
 
 module.exports = {
@@ -12,5 +13,6 @@ module.exports = {
     USER_IS_NOT_FOUND,
     EMAIL_ALREADY_EXISTS,
     ACCESS_DENIED,
-    INVALID_TOKEN
+    INVALID_TOKEN,
+    WRONG_TEMPLATE
 };

@@ -22,5 +22,10 @@ module.exports = {
     INVALID_TOKEN: {
         message: 'Invalid token',
         status: 401
+    },
+
+    WRONG_TEMPLATE: {
+        message: 'Wrong template name',
+        status: 404
     }
 };
