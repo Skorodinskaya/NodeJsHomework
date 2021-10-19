@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const {userController} = require('../controllers');
 const {userMiddleware, authMiddleware} = require('../middlewares');
-const {ADMIN} = require('../configs/user-roles.enum');
+const {ADMIN} = require('../configs');
 const {userValidator: {createUserValidator, updateUserValidator}} = require('../validators');
 
 router.get('/', userController.getUsers);
@@ -10,7 +10,7 @@ router.get('/', userController.getUsers);
 router.post(
     '/',
     userMiddleware.isUserBodyValid(createUserValidator),
-    userMiddleware.createUserMiddleware,
+    userMiddleware.checkEmail,
     userController.createUser);
 
 

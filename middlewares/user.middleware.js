@@ -2,7 +2,7 @@ const {User} = require('../dataBase');
 const {ErrorHandler, EMAIL_ALREADY_EXISTS, USER_IS_NOT_FOUND, ACCESS_DENIED} = require('../errors');
 
 module.exports = {
-    createUserMiddleware: async (req, res, next) => {
+    checkEmail: async (req, res, next) => {
         try {
             const {email} = req.body;
 

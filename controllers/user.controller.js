@@ -1,4 +1,4 @@
-const {WELCOME} = require('../configs/email-actions.enum');
+const {CREATED, UPDATED, DELETED} = require('../configs');
 const {User} = require('../dataBase');
 const {passwordService, emailService} = require('../service');
 const {userNormalizator} = require('../util/user.util');
@@ -28,7 +28,9 @@ module.exports = {
         try {
             const hashedPassword = await passwordService.hash(req.body.password);
 
-            await emailService.sendMail(req.body.email, WELCOME, {userName: req.body.name});
+            const {name: userName} = req.body;
+
+            await emailService.sendMail(req.body.email, CREATED, {userName});
 
             const newUser = await User.create({...req.body, password: hashedPassword});
 
@@ -44,7 +46,12 @@ module.exports = {
         try {
             const {user_id} = req.params;
 
+            const {name: userName} = req.body;
+
+            await emailService.sendMail(req.body.email, UPDATED, {userName});
+
             const user = await User.findByIdAndUpdate(user_id, {$set: {...req.body}}, {new: true});
+
 
             const normalizeNewUser = userNormalizator(user);
 
@@ -57,6 +64,10 @@ module.exports = {
     deleteUser: async (req, res, next) => {
         try {
             const {user_id} = req.params;
+
+            const {name: userName} = req.body;
+
+            await emailService.sendMail(req.body.email, DELETED, {userName});
 
             const deletedUser = await User.findByIdAndDelete(user_id);
 

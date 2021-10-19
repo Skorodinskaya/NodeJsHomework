@@ -6,6 +6,7 @@ const {MONGO_CONNECT_URL, PORT,
 const {DEFAULT_STATUS_ERR, PASSWORD_REGEXP, EMAIL_REGEXP, AUTHORIZATION} = require('./constants');
 const userRoles = require ('./user-roles.enum');
 const {ACCESS, REFRESH} = require('./token-type.enum');
+const {CREATED, UPDATED, DELETED} = require('./email-actions.enum');
 
 module.exports = {
     MONGO_CONNECT_URL,
@@ -23,7 +24,11 @@ module.exports = {
     userRoles,
 
     ACCESS,
-    REFRESH
+    REFRESH,
+
+    CREATED,
+    UPDATED,
+    DELETED
 };
 
 
