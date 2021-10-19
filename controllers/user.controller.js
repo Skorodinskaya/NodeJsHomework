@@ -1,31 +1,65 @@
-const {read} = require('../helper/user_helper');
+const {User} = require('../dataBase');
+const {passwordService} = require('../service');
+const {userNormalizator} = require('../util/user.util');
 
 module.exports = {
-    getUsers: async (req, res) => {
-        const users = await read();
+    getUsers: async (req, res, next) => {
+        try {
+            const users = await User.find({});
 
-        res.json(users);
+            const normalizedUsers = users.map(value => userNormalizator(value));
+
+            res.json(normalizedUsers);
+        } catch (e) {
+            next(e);
+        }
     },
 
-    getUserById: async (req, res) => {
-        const {user_id} = req.params;
-        const users = await read();
-        res.json(users[user_id - 1]);
+    getUsersById: (req, res) => {
+        const user = req.user;
 
+        const normalizedUser = userNormalizator(user);
+
+        res.json(normalizedUser);
     },
 
-    // createUser: (req, res) => {
-    //     read().then(users => {
-    //          users.push({...req.body, id: users.length + 1});
-    //              res.json(users);
-    //     })
-    // },
-    //
-    // deleteUserById: (req, res) => {
-    // const {user_id} = req.params;
-    //     read().then(users => {
-    //         res.json(users);
-    //         delete(user_id);
-    //     })
-    // }
-}
+    createUser: async (req, res, next) => {
+        try {
+            const hashedPassword = await passwordService.hash(req.body.password);
+
+            const newUser = await User.create({...req.body, password: hashedPassword});
+
+            const normalizeNewUser = userNormalizator(newUser);
+
+            res.json(normalizeNewUser);
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    updateUser: async (req, res, next) => {
+        try {
+            const {user_id} = req.params;
+
+            const user = await User.findByIdAndUpdate(user_id, {$set: {...req.body}}, {new: true});
+
+            const normalizeNewUser = userNormalizator(user);
+
+            res.json(normalizeNewUser);
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    deleteUser: async (req, res, next) => {
+        try {
+            const {user_id} = req.params;
+
+            const deletedUser = await User.findByIdAndDelete(user_id);
+
+            res.json(deletedUser);
+        } catch (e) {
+            next(e);
+        }
+    },
+};
