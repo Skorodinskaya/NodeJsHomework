@@ -36,7 +36,7 @@ module.exports = {
 
             const normalizeNewUser = userNormalizator(newUser);
 
-            res.json(normalizeNewUser);
+            res.status(201).json(normalizeNewUser);
         } catch (e) {
             next(e);
         }
@@ -45,17 +45,14 @@ module.exports = {
     updateUser: async (req, res, next) => {
         try {
             const {user_id} = req.params;
-
             const {name: userName} = req.body;
 
-            await emailService.sendMail(req.body.email, UPDATED, {userName});
+            await emailService.sendMail(req.user.email, UPDATED, {userName});
 
             const user = await User.findByIdAndUpdate(user_id, {$set: {...req.body}}, {new: true});
-
-
             const normalizeNewUser = userNormalizator(user);
 
-            res.json(normalizeNewUser);
+            res.status(201).json(normalizeNewUser);
         } catch (e) {
             next(e);
         }
@@ -69,9 +66,9 @@ module.exports = {
 
             await emailService.sendMail(req.body.email, DELETED, {userName});
 
-            const deletedUser = await User.findByIdAndDelete(user_id);
+            await User.findByIdAndDelete(user_id);
 
-            res.json(deletedUser);
+            res.sendStatus(204);
         } catch (e) {
             next(e);
         }
