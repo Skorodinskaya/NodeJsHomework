@@ -2,8 +2,6 @@ const {Schema, model} = require('mongoose');
 
 const {FORGOT_PASSWORD} = require('/configs');
 
-console.log(FORGOT_PASSWORD);
-
 const actionTokenSchema = new Schema({
     token: {
         type: String,
@@ -14,7 +12,7 @@ const actionTokenSchema = new Schema({
     token_type: {
         type: String,
         required: true,
-        enum: [],
+        enum: Object.values(FORGOT_PASSWORD),
         trim: true
     },
 

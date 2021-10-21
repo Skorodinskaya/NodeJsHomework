@@ -67,7 +67,7 @@ module.exports = {
 
             await User.findByIdAndDelete(user_id);
 
-            res.status(STATUS_204);
+            res.sendStatus(STATUS_204);
         } catch (e) {
             next(e);
         }

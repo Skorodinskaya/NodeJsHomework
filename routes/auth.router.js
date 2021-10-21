@@ -19,4 +19,8 @@ authRouter.post(
     authMiddleware.checkRefreshToken,
     authController.refreshToken);
 
+authRouter.post(
+    '/password/forgot',
+    authController.sendMailForgotPassword);
+
 module.exports = authRouter;

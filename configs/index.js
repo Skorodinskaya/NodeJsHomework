@@ -2,7 +2,9 @@ const {MONGO_CONNECT_URL, PORT,
     JWT_ACCESS_SECRET,
     JWT_REFRESH_SECRET,
     NO_REPLY_EMAIL,
-    NO_REPLY_EMAIL_PASSWORD}= require('./config');
+    NO_REPLY_EMAIL_PASSWORD,
+    SECRET_WORD
+}= require('./config');
 const {DEFAULT_STATUS_ERR, PASSWORD_REGEXP, EMAIL_REGEXP, AUTHORIZATION} = require('./constants');
 const {ADMIN, USER, MANAGER} = require ('./user-roles.enum');
 const {ACCESS, REFRESH} = require('./token-type.enum');
@@ -17,6 +19,7 @@ module.exports = {
     JWT_REFRESH_SECRET,
     NO_REPLY_EMAIL_PASSWORD,
     NO_REPLY_EMAIL,
+    SECRET_WORD,
 
     DEFAULT_STATUS_ERR,
     PASSWORD_REGEXP,

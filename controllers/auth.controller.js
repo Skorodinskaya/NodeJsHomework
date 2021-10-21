@@ -1,7 +1,7 @@
-const {O_Auth} = require('../dataBase');
+const {O_Auth, User} = require('../dataBase');
 const {userNormalizator} = require('../util/user.util');
 const {jwtService} = require('../service');
-
+const {USER_IS_NOT_FOUND, ErrorHandler} = require('../errors');
 
 module.exports = {
     loginController: async (req, res, next) => {
@@ -54,6 +54,22 @@ module.exports = {
                 user: normalizedUser,
                 ...tokenPair
             });
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    sendMailForgotPassword: async (res, req, next) => {
+        try {
+            const {email} = req.body;
+
+            const user = await User.find({email});
+
+            if(!user) {
+                throw new ErrorHandler(USER_IS_NOT_FOUND);
+            }
+
+            res.json('successful');
         } catch (e) {
             next(e);
         }

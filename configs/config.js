@@ -7,5 +7,7 @@ module.exports = {
 
     NO_REPLY_EMAIL: process.env.NO_REPLY_EMAIL || 'ooo',
     NO_REPLY_EMAIL_PASSWORD: process.env.NO_REPLY_EMAIL_PASSWORD || 'ppp',
+
+    SECRET_WORD: process.env.SECRET_WORD || 'iii'
 };
 
