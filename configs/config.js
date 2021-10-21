@@ -8,6 +8,8 @@ module.exports = {
     NO_REPLY_EMAIL: process.env.NO_REPLY_EMAIL || 'ooo',
     NO_REPLY_EMAIL_PASSWORD: process.env.NO_REPLY_EMAIL_PASSWORD || 'ppp',
 
-    SECRET_WORD: process.env.SECRET_WORD || 'iii'
+    SECRET_WORD: process.env.SECRET_WORD || 'iii',
+
+    LINK_TO_WEBSITE: process.env.LINK_TO_WEBSITE || 'ttt',
 };
 

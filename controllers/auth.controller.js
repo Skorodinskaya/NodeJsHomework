@@ -1,7 +1,10 @@
-const {O_Auth, User} = require('../dataBase');
+const {O_Auth, User, ActionToken} = require('../dataBase');
 const {userNormalizator} = require('../util/user.util');
-const {jwtService} = require('../service');
+const {jwtService, emailService} = require('../service');
 const {USER_IS_NOT_FOUND, ErrorHandler} = require('../errors');
+const {LINK_TO_WEBSITE, AUTHORIZATION} = require('../configs');
+const ActionTokenTypeEnum = require('../configs/action_token_type.enum');
+const EmailActionEnum = require('../configs/email-actions.enum');
 
 module.exports = {
     loginController: async (req, res, next) => {
@@ -63,15 +66,41 @@ module.exports = {
         try {
             const {email} = req.body;
 
-            const user = await User.find({email});
+            const user = await User.findOne({email});
 
             if(!user) {
                 throw new ErrorHandler(USER_IS_NOT_FOUND);
             }
 
-            res.json('successful');
+            const actionToken = jwtService.generateActionToken(ActionTokenTypeEnum.FORGOT_PASSWORD);
+
+            await ActionToken.create({
+                token: actionToken,
+                token_type: ActionTokenTypeEnum.FORGOT_PASSWORD,
+                user_id: user._id
+            });
+
+            await emailService.sendMail(
+                email,
+                EmailActionEnum.FORGOT_PASSWORD,
+                {forgotPasswordUrl: LINK_TO_WEBSITE`/passwordForgot?token=${actionToken}`});
+
+            res.json('successful forgetting');
         } catch (e) {
             next(e);
         }
     },
+
+    setNewPasswordAfterForgot: (req, res, next) => {
+        try {
+            const actionToken = req.get(AUTHORIZATION);
+
+            console.log(actionToken);
+
+            res.json('successful setting');
+        } catch (e) {
+            next(e);
+        }
+    },
+
 };

@@ -86,4 +86,26 @@ module.exports = {
             next(e);
         }
     },
+    checkActionToken: async (req, res, next) => {
+        try {
+            const token = req.get(AUTHORIZATION);
+
+            if (!token) {
+                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
+            }
+
+            await jwtService.verifyToken(token, REFRESH);
+
+            const tokenResponse = await O_Auth.findOne({action_token: token});
+
+            if (!tokenResponse) {
+                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
+            }
+
+            req.user = tokenResponse.user_id;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
 };

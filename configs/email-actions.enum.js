@@ -1,6 +1,7 @@
 module.exports = {
     CREATED: 'created',
     UPDATED: 'updated',
-    DELETED: 'deleted'
+    DELETED: 'deleted',
+    FORGOT_PASSWORD: 'forgotPassword'
 };
 

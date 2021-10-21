@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const {ErrorHandler, INVALID_TOKEN} = require('../errors');
-const {JWT_ACCESS_SECRET, JWT_REFRESH_SECRET, ACCESS, FORGOT_PASSWORD, SECRET_WORD} = require('../configs');
+const {JWT_ACCESS_SECRET, JWT_REFRESH_SECRET, ACCESS, SECRET_WORD} = require('../configs');
+const FORGOT_PASSWORD = require('../configs/email-actions.enum');
 
 module.exports = {
     generateTokenPair: () => {
@@ -28,15 +29,12 @@ module.exports = {
         switch (actionTokenType) {
             case FORGOT_PASSWORD:
                 secretWord = SECRET_WORD;
-
-                console.log(secretWord);
-
                 break;
             default:
                 throw new ErrorHandler(INVALID_TOKEN);
         }
 
-        return jwt.sign({}, JWT_ACCESS_SECRET, {expiresIn: '15m'});
+        return jwt.sign({}, secretWord, {expiresIn: '24h'});
     }
 };
 

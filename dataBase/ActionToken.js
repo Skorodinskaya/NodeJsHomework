@@ -1,6 +1,6 @@
 const {Schema, model} = require('mongoose');
 
-const {FORGOT_PASSWORD} = require('/configs');
+const {FORGOT_PASSWORD} = require('../configs/action_token_type.enum');
 
 const actionTokenSchema = new Schema({
     token: {

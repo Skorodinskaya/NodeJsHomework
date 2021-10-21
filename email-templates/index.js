@@ -1,4 +1,4 @@
-const emailActionEnum = require('../configs');
+const emailActionEnum = require('../configs/email-actions.enum');
 
 module.exports = {
     [emailActionEnum.CREATED]: {
@@ -14,6 +14,11 @@ module.exports = {
     [emailActionEnum.DELETED]: {
         templateName: 'deleted',
         subject: 'Goodbye!'
+    },
+
+    [emailActionEnum.FORGOT_PASSWORD]: {
+        templateName: 'forgot-password',
+        subject: 'Password is forgotten!'
     },
 
 
