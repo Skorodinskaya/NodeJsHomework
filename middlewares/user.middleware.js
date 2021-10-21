@@ -54,7 +54,6 @@ module.exports = {
     checkRole: (roleArr = []) => (req, res, next) => {
         try {
             const {role} = req.user;
-
             if (!roleArr.includes(role)) {
                 throw new ErrorHandler (ACCESS_DENIED.message, ACCESS_DENIED.status);
             }

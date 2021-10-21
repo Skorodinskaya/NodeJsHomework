@@ -28,8 +28,8 @@ router.put(
 
 router.delete(
     '/:user_id',
-    userMiddleware.checkById,
     authMiddleware.checkAccessToken,
+    userMiddleware.checkById,
     userMiddleware.checkRole([ADMIN]),
     userController.deleteUser);
 
