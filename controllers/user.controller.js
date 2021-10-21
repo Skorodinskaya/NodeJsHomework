@@ -1,4 +1,4 @@
-const {CREATED, UPDATED, DELETED} = require('../configs');
+const {CREATED, UPDATED, DELETED, STATUS_204, STATUS_201} = require('../configs');
 const {User} = require('../dataBase');
 const {emailService} = require('../service');
 const {userNormalizator} = require('../util/user.util');
@@ -35,7 +35,7 @@ module.exports = {
 
             const normalizeNewUser = userNormalizator(newUser);
 
-            res.json(normalizeNewUser);
+            res.status(STATUS_201).json(normalizeNewUser);
         } catch (e) {
             next(e);
         }
@@ -44,17 +44,14 @@ module.exports = {
     updateUser: async (req, res, next) => {
         try {
             const {user_id} = req.params;
-
             const {name: userName} = req.body;
 
-            await emailService.sendMail(req.body.email, UPDATED, {userName});
+            await emailService.sendMail(req.user.email, UPDATED, {userName});
 
             const user = await User.findByIdAndUpdate(user_id, {$set: {...req.body}}, {new: true});
-
-
             const normalizeNewUser = userNormalizator(user);
 
-            res.json(normalizeNewUser);
+            res.status(STATUS_201).json(normalizeNewUser);
         } catch (e) {
             next(e);
         }
@@ -68,9 +65,9 @@ module.exports = {
 
             await emailService.sendMail(req.body.email, DELETED, {userName});
 
-            const deletedUser = await User.findByIdAndDelete(user_id);
+            await User.findByIdAndDelete(user_id);
 
-            res.json(deletedUser);
+            res.status(STATUS_204);
         } catch (e) {
             next(e);
         }

@@ -5,7 +5,7 @@ module.exports = {
     JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET || 'zzz',
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || 'xxx',
 
-    NO_REPLY_EMAIL: process.env.NO_REPLY_EMAIL || 'skorodinskaya777@gmail.com',
-    NO_REPLY_EMAIL_PASSWORD: process.env.NO_REPLY_EMAIL_PASSWORD || 'superuser01',
+    NO_REPLY_EMAIL: process.env.NO_REPLY_EMAIL || 'ooo',
+    NO_REPLY_EMAIL_PASSWORD: process.env.NO_REPLY_EMAIL_PASSWORD || 'ppp',
 };
 
