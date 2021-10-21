@@ -1,6 +1,6 @@
 const {User, O_Auth} = require('../dataBase');
 const {authValidator} = require('../validators');
-const {passwordService, jwtService} = require('../service');
+const {jwtService} = require('../service');
 const {ErrorHandler, WRONG_EMAIL_OR_PASSWORD, INVALID_TOKEN} = require('../errors');
 const {AUTHORIZATION, REFRESH} = require('../configs');
 
@@ -23,15 +23,13 @@ module.exports = {
 
     authLoginMiddleware: async (req, res, next) => {
         try {
-            const {email, password} = req.body;
+            const {email} = req.body;
 
             const auth = await User.findOne({email});
 
             if (!auth) {
                 throw new ErrorHandler(WRONG_EMAIL_OR_PASSWORD.message, WRONG_EMAIL_OR_PASSWORD.status);
             }
-
-            await passwordService.compare(password, auth.password);
 
             req.user = auth;
             next();
@@ -50,9 +48,7 @@ module.exports = {
 
             await jwtService.verifyToken(token);
 
-            const tokenResponse = await O_Auth
-                .findOne({access_token: token})
-                .populate('user_id');
+            const tokenResponse = await O_Auth.findOne({access_token: token});
 
             if (!tokenResponse) {
                 throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
@@ -76,9 +72,7 @@ module.exports = {
 
             await jwtService.verifyToken(token, REFRESH);
 
-            const tokenResponse = await O_Auth
-                .findOne({refresh_token: token})
-                .populate('user_id');
+            const tokenResponse = await O_Auth.findOne({refresh_token: token});
 
             if (!tokenResponse) {
                 throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);

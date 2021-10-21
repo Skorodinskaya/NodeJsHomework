@@ -1,6 +1,6 @@
 const {CREATED, UPDATED, DELETED} = require('../configs');
 const {User} = require('../dataBase');
-const {passwordService, emailService} = require('../service');
+const {emailService} = require('../service');
 const {userNormalizator} = require('../util/user.util');
 
 module.exports = {
@@ -26,13 +26,12 @@ module.exports = {
 
     createUser: async (req, res, next) => {
         try {
-            const hashedPassword = await passwordService.hash(req.body.password);
 
             const {name: userName} = req.body;
 
             await emailService.sendMail(req.body.email, CREATED, {userName});
 
-            const newUser = await User.create({...req.body, password: hashedPassword});
+            const newUser = await User.createUserWithHashPassword(req.body);
 
             const normalizeNewUser = userNormalizator(newUser);
 

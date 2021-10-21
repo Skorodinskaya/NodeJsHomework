@@ -1,6 +1,7 @@
 const {Schema, model} = require('mongoose');
 
 const userRoles = require('../configs/user-roles.enum');
+const {passwordService} = require('../service');
 
 const userSchema = new Schema({
     name: {
@@ -26,6 +27,24 @@ const userSchema = new Schema({
         default: userRoles.USER,
         enum: Object.values(userRoles)
     }
-}, {timestamps: true});
+}, {timestamps: true, toObject: {virtuals: true}, toJSON: {virtuals: true}});
+
+userSchema.methods = {
+    comparePassword(password) {
+        return passwordService.compare(password, this.password);
+    }
+};
+
+userSchema.statics = {
+    async createUserWithHashPassword(userObject) {
+        const hashPassword = await passwordService.hash(userObject.password);
+
+        return this.create({...userObject, password: hashPassword});
+    }
+};
+
+userSchema.virtual('fullName').get(function() {
+    return `${this.name} ${this.role} How are you?`;
+});
 
 module.exports = model('user', userSchema);

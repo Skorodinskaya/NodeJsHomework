@@ -8,6 +8,8 @@ module.exports = {
         try {
             const user = req.user;
 
+            await user.comparePassword(req.body.password);
+
             const tokenPair = jwtService.generateTokenPair();
 
             const normalizedUser = userNormalizator(user);
