@@ -1,5 +1,6 @@
 const {User} = require('../dataBase');
 const {ErrorHandler, EMAIL_ALREADY_EXISTS, USER_IS_NOT_FOUND, ACCESS_DENIED} = require('../errors');
+const {STATUS_400} = require('../configs');
 
 module.exports = {
     checkEmail: async (req, res, next) => {
@@ -23,7 +24,7 @@ module.exports = {
             const {error, value} = await validator.validate(req.body);
 
             if (error) {
-                throw new ErrorHandler(error.details[0].message,400);
+                throw new ErrorHandler(error.details[0].message, STATUS_400);
             }
 
             req.body = value;

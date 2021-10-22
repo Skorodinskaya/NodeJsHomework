@@ -8,9 +8,9 @@ const {MONGO_CONNECT_URL, PORT,
 }= require('./config');
 const {DEFAULT_STATUS_ERR, PASSWORD_REGEXP, EMAIL_REGEXP, AUTHORIZATION} = require('./constants');
 const {ADMIN, USER, MANAGER} = require ('./user-roles.enum');
-const {ACCESS, REFRESH} = require('./token-type.enum');
+const {ACCESS, REFRESH, ACTION} = require('./token-type.enum');
 const {CREATED, UPDATED, DELETED} = require('./email-actions.enum');
-const {STATUS_201, STATUS_204} = require('./status.codes');
+const {STATUS_201, STATUS_204, STATUS_400} = require('./status.codes');
 
 module.exports = {
     MONGO_CONNECT_URL,
@@ -33,6 +33,7 @@ module.exports = {
 
     ACCESS,
     REFRESH,
+    ACTION,
 
     CREATED,
     UPDATED,
@@ -40,6 +41,7 @@ module.exports = {
 
     STATUS_201,
     STATUS_204,
+    STATUS_400
 };
 
 

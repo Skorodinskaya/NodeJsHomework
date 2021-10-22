@@ -1,8 +1,8 @@
-const {O_Auth, User, ActionToken} = require('../dataBase');
+const {O_Auth, ActionToken, User} = require('../dataBase');
 const {userNormalizator} = require('../util/user.util');
-const {jwtService, emailService} = require('../service');
-const {USER_IS_NOT_FOUND, ErrorHandler} = require('../errors');
-const {LINK_TO_WEBSITE, AUTHORIZATION} = require('../configs');
+const {jwtService, emailService, passwordService} = require('../service');
+const {USER_IS_NOT_FOUND, ErrorHandler, PASSWORD_CHANGED} = require('../errors');
+const {LINK_TO_WEBSITE, STATUS_204} = require('../configs');
 const ActionTokenTypeEnum = require('../configs/action_token_type.enum');
 const EmailActionEnum = require('../configs/email-actions.enum');
 
@@ -64,16 +64,9 @@ module.exports = {
 
     sendMailForgotPassword: async (res, req, next) => {
         try {
-            const {email} = req.body;
+            const {email, user} = req.body;
 
-            const user = await User.findOne({email});
-
-            if(!user) {
-                throw new ErrorHandler(USER_IS_NOT_FOUND);
-            }
-
-            const actionToken = jwtService.generateActionToken(ActionTokenTypeEnum.FORGOT_PASSWORD);
-
+            const actionToken = jwtService.generateActionToken(email, ActionTokenTypeEnum.FORGOT_PASSWORD);
             await ActionToken.create({
                 token: actionToken,
                 token_type: ActionTokenTypeEnum.FORGOT_PASSWORD,
@@ -85,19 +78,28 @@ module.exports = {
                 EmailActionEnum.FORGOT_PASSWORD,
                 {forgotPasswordUrl: LINK_TO_WEBSITE`/passwordForgot?token=${actionToken}`});
 
-            res.json('successful forgetting');
+            res.sendStatus(STATUS_204);
         } catch (e) {
             next(e);
         }
     },
 
-    setNewPasswordAfterForgot: (req, res, next) => {
+    setNewPasswordAfterForgot: async (req, res, next) => {
         try {
-            const actionToken = req.get(AUTHORIZATION);
+            const {_id} = req.user;
+            const {password} = req.body;
 
-            console.log(actionToken);
+            const hashedPassword = await passwordService.hash(password);
 
-            res.json('successful setting');
+            const updatePassword = await User.findByIdAndUpdate({_id}, {$set: {password: hashedPassword}});
+
+            if(!updatePassword) {
+                throw new ErrorHandler(USER_IS_NOT_FOUND.message, USER_IS_NOT_FOUND.status);
+            }
+
+            await O_Auth.deleteMany({user_id: _id});
+
+            res.json(PASSWORD_CHANGED);
         } catch (e) {
             next(e);
         }

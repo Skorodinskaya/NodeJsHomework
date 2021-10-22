@@ -1,8 +1,8 @@
-const {User, O_Auth} = require('../dataBase');
+const {User, O_Auth, ActionToken} = require('../dataBase');
 const {authValidator} = require('../validators');
 const {jwtService} = require('../service');
 const {ErrorHandler, WRONG_EMAIL_OR_PASSWORD, INVALID_TOKEN} = require('../errors');
-const {AUTHORIZATION, REFRESH} = require('../configs');
+const {AUTHORIZATION, REFRESH, ACTION} = require('../configs');
 
 module.exports = {
     isAuthValid: (req, res, next) => {
@@ -94,13 +94,15 @@ module.exports = {
                 throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
             }
 
-            await jwtService.verifyToken(token, REFRESH);
+            await jwtService.verifyToken(token, ACTION);
 
             const tokenResponse = await O_Auth.findOne({action_token: token});
 
             if (!tokenResponse) {
                 throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
             }
+
+            await ActionToken.deleteOne({action_token: token});
 
             req.user = tokenResponse.user_id;
             next();
