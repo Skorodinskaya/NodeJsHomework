@@ -62,14 +62,14 @@ module.exports = {
         }
     },
 
-    sendMailForgotPassword: async (res, req, next) => {
+    sendMailForgotPassword: async (req, res, next) => {
         try {
 
             const user = req.user;
 
             const {email} = user;
 
-            const actionToken = jwtService.generateActionToken(email, ActionTokenTypeEnum.FORGOT_PASSWORD);
+            const actionToken = jwtService.generateActionToken(ActionTokenTypeEnum.FORGOT_PASSWORD);
 
             await ActionToken.create({
                 token: actionToken,
@@ -80,7 +80,7 @@ module.exports = {
             await emailService.sendMail(
                 email,
                 EmailActionEnum.FORGOT_PASSWORD,
-                {forgotPasswordUrl: LINK_TO_WEBSITE`/passwordForgot?token=${actionToken}`});
+                {forgotPasswordUrl: LINK_TO_WEBSITE + `/passwordForgot?token=${actionToken}`});
 
             res.sendStatus(STATUS_204);
         } catch (e) {

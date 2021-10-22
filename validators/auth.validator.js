@@ -24,7 +24,7 @@ const emailValidator = Joi.object({
         .regex(EMAIL_REGEXP),
 });
 const passwordValidator = Joi.object({
-    email: Joi
+    password: Joi
         .string()
         .required()
         .trim()

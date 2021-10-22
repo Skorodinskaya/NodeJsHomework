@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const {ErrorHandler, INVALID_TOKEN} = require('../errors');
 const {JWT_ACCESS_SECRET, JWT_REFRESH_SECRET, ACCESS, SECRET_WORD} = require('../configs');
-const FORGOT_PASSWORD = require('../configs/email-actions.enum');
+const ActionTokenTypeEnum = require("../configs/action_token_type.enum");
 
 module.exports = {
     generateTokenPair: () => {
@@ -14,7 +14,7 @@ module.exports = {
         };
     },
 
-    verifyToken: async (token, tokenType = ACCESS) => {
+    verifyToken: async (token, tokenType = ACCESS) => {                       //TODO тут валить помилку. далі пробуй сама фіксати
         try {
             const secret = tokenType === ACCESS ? JWT_ACCESS_SECRET : JWT_REFRESH_SECRET;
             await jwt.verify(token, secret);
@@ -27,7 +27,7 @@ module.exports = {
         let secretWord;
 
         switch (actionTokenType) {
-            case FORGOT_PASSWORD:
+            case ActionTokenTypeEnum.FORGOT_PASSWORD:
                 secretWord = SECRET_WORD;
                 break;
             default:
