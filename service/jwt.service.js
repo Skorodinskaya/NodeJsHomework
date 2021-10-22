@@ -1,7 +1,12 @@
 const jwt = require('jsonwebtoken');
 const {ErrorHandler, INVALID_TOKEN} = require('../errors');
-const {JWT_ACCESS_SECRET, JWT_REFRESH_SECRET, ACCESS, SECRET_WORD} = require('../configs');
-const ActionTokenTypeEnum = require("../configs/action_token_type.enum");
+const {JWT_ACCESS_SECRET,
+    JWT_REFRESH_SECRET,
+    ACCESS,
+    JWT_PASSWORD_UPGRADE_SECRET,
+    JWT_PASSWORD_FORGOT_SECRET,
+    REFRESH} = require('../configs');
+const ActionTokenTypeEnum = require('../configs/action_token_type.enum');
 
 module.exports = {
     generateTokenPair: () => {
@@ -14,12 +19,31 @@ module.exports = {
         };
     },
 
-    verifyToken: async (token, tokenType = ACCESS) => {                       //TODO тут валить помилку. далі пробуй сама фіксати
+    verifyToken: async (token, tokenType) => {
         try {
-            const secret = tokenType === ACCESS ? JWT_ACCESS_SECRET : JWT_REFRESH_SECRET;
-            await jwt.verify(token, secret);
+            let secretWord;
+
+            switch (tokenType) {
+                case ACCESS:
+                    secretWord = ACCESS;
+                    break;
+
+                case REFRESH:
+                    secretWord = REFRESH;
+                    break;
+
+                case JWT_PASSWORD_FORGOT_SECRET:
+                    secretWord = JWT_PASSWORD_FORGOT_SECRET;
+                    break;
+
+                case JWT_PASSWORD_UPGRADE_SECRET:
+                    secretWord = JWT_PASSWORD_UPGRADE_SECRET;
+                    break;
+
+            }
+            await jwt.verify(token, secretWord);
         } catch (e) {
-            throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
+            throw new ErrorHandler(INVALID_TOKEN);
         }
     },
 
@@ -28,7 +52,7 @@ module.exports = {
 
         switch (actionTokenType) {
             case ActionTokenTypeEnum.FORGOT_PASSWORD:
-                secretWord = SECRET_WORD;
+                secretWord = JWT_PASSWORD_FORGOT_SECRET;
                 break;
             default:
                 throw new ErrorHandler(INVALID_TOKEN);

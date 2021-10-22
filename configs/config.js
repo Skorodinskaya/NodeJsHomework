@@ -4,11 +4,12 @@ module.exports = {
 
     JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET || 'zzz',
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || 'xxx',
+    JWT_PASSWORD_FORGOT_SECRET: process.env.JWT_PASSWORD_FORGOT_SECRET || 'zzz',
+    JWT_PASSWORD_UPGRADE_SECRET: process.env.JWT_PASSWORD_UPGRADE_SECRET || 'xxx',
+
 
     NO_REPLY_EMAIL: process.env.NO_REPLY_EMAIL || 'ooo',
     NO_REPLY_EMAIL_PASSWORD: process.env.NO_REPLY_EMAIL_PASSWORD || 'ppp',
-
-    SECRET_WORD: process.env.SECRET_WORD || 'iii',
 
     LINK_TO_WEBSITE: process.env.LINK_TO_WEBSITE || 'ttt',
 };
