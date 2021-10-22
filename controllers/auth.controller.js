@@ -66,8 +66,7 @@ module.exports = {
         try {
 
             const user = req.user;
-
-            const {email} = user;
+            const {email} = req.body;
 
             const actionToken = jwtService.generateActionToken(ActionTokenTypeEnum.FORGOT_PASSWORD);
 
