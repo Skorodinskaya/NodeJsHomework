@@ -96,7 +96,7 @@ module.exports = {
 
             await jwtService.verifyToken(token, ACTION);
 
-            const tokenResponse = await O_Auth.findOne({action_token: token});
+            const tokenResponse = await ActionToken.findOne({action_token: token});
 
             if (!tokenResponse) {
                 throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);

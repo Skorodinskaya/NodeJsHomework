@@ -2,7 +2,7 @@ const {O_Auth, ActionToken, User} = require('../dataBase');
 const {userNormalizator} = require('../util/user.util');
 const {jwtService, emailService, passwordService} = require('../service');
 const {USER_IS_NOT_FOUND, ErrorHandler, PASSWORD_CHANGED} = require('../errors');
-const {LINK_TO_WEBSITE, STATUS_204} = require('../configs');
+const {LINK_TO_WEBSITE, STATUS_204, NEW_PASSWORD} = require('../configs');
 const ActionTokenTypeEnum = require('../configs/action_token_type.enum');
 const EmailActionEnum = require('../configs/email-actions.enum');
 
@@ -64,9 +64,13 @@ module.exports = {
 
     sendMailForgotPassword: async (res, req, next) => {
         try {
-            const {email, user} = req.body;
+
+            const user = req.user;
+
+            const {email} = user;
 
             const actionToken = jwtService.generateActionToken(email, ActionTokenTypeEnum.FORGOT_PASSWORD);
+
             await ActionToken.create({
                 token: actionToken,
                 token_type: ActionTokenTypeEnum.FORGOT_PASSWORD,
@@ -86,16 +90,17 @@ module.exports = {
 
     setNewPasswordAfterForgot: async (req, res, next) => {
         try {
-            const {_id} = req.user;
+            const {_id, email, name} = req.user;
             const {password} = req.body;
 
             const hashedPassword = await passwordService.hash(password);
 
-            const updatePassword = await User.findByIdAndUpdate({_id}, {$set: {password: hashedPassword}});
+            const updatePassword = await User.findByIdAndUpdate(_id, {$set: {password: hashedPassword}});
 
             if(!updatePassword) {
                 throw new ErrorHandler(USER_IS_NOT_FOUND.message, USER_IS_NOT_FOUND.status);
             }
+            await emailService.sendMail(email, NEW_PASSWORD, {userName: name, password});
 
             await O_Auth.deleteMany({user_id: _id});
 

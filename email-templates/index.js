@@ -21,5 +21,10 @@ module.exports = {
         subject: 'Password is forgotten!'
     },
 
+    [emailActionEnum.NEW_PASSWORD]: {
+        templateName: 'new-password',
+        subject: 'You changed your password!'
+    },
+
 
 };
