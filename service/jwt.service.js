@@ -6,7 +6,7 @@ const {JWT_ACCESS_SECRET,
     JWT_PASSWORD_UPGRADE_SECRET,
     JWT_PASSWORD_FORGOT_SECRET,
     REFRESH} = require('../configs');
-const ActionTokenTypeEnum = require('../configs/action_token_type.enum');
+const {FORGOT_PASSWORD} = require('../configs/action_token_type.enum');
 
 module.exports = {
     generateTokenPair: () => {
@@ -25,21 +25,20 @@ module.exports = {
 
             switch (tokenType) {
                 case ACCESS:
-                    secretWord = ACCESS;
+                    secretWord = JWT_ACCESS_SECRET;
                     break;
 
                 case REFRESH:
-                    secretWord = REFRESH;
+                    secretWord = JWT_REFRESH_SECRET;
                     break;
 
-                case JWT_PASSWORD_FORGOT_SECRET:
+                case FORGOT_PASSWORD:
                     secretWord = JWT_PASSWORD_FORGOT_SECRET;
                     break;
 
-                case JWT_PASSWORD_UPGRADE_SECRET:
-                    secretWord = JWT_PASSWORD_UPGRADE_SECRET;
-                    break;
-
+                // case JWT_PASSWORD_UPGRADE_SECRET:                  // TODO  цей кейс пока без потреби
+                //     secretWord = JWT_PASSWORD_UPGRADE_SECRET;
+                //     break;
             }
             await jwt.verify(token, secretWord);
         } catch (e) {
@@ -51,7 +50,7 @@ module.exports = {
         let secretWord;
 
         switch (actionTokenType) {
-            case ActionTokenTypeEnum.FORGOT_PASSWORD:
+            case FORGOT_PASSWORD:
                 secretWord = JWT_PASSWORD_FORGOT_SECRET;
                 break;
             default:

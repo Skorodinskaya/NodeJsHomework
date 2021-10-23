@@ -1,8 +1,9 @@
+const { FORGOT_PASSWORD } = require("../configs/action_token_type.enum");
 const {User, O_Auth, ActionToken} = require('../dataBase');
 const {authValidator} = require('../validators');
 const {jwtService} = require('../service');
 const {ErrorHandler, WRONG_EMAIL_OR_PASSWORD, INVALID_TOKEN} = require('../errors');
-const {AUTHORIZATION, REFRESH, ACTION} = require('../configs');
+const {AUTHORIZATION, REFRESH, ACTION, ACCESS} = require('../configs');
 
 module.exports = {
     isAuthValid: (req, res, next) => {
@@ -46,7 +47,7 @@ module.exports = {
                 throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
             }
 
-            await jwtService.verifyToken(token);
+            await jwtService.verifyToken(token, ACCESS);
 
             const tokenResponse = await O_Auth.findOne({access_token: token});
 
@@ -94,7 +95,7 @@ module.exports = {
                 throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
             }
 
-            await jwtService.verifyToken(token, ACTION);
+            await jwtService.verifyToken(token, FORGOT_PASSWORD);
 
             const tokenResponse = await ActionToken.findOne({action_token: token});
 
