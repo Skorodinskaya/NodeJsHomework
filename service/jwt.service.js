@@ -3,7 +3,6 @@ const {ErrorHandler, INVALID_TOKEN} = require('../errors');
 const {JWT_ACCESS_SECRET,
     JWT_REFRESH_SECRET,
     ACCESS,
-    JWT_PASSWORD_UPGRADE_SECRET,
     JWT_PASSWORD_FORGOT_SECRET,
     REFRESH} = require('../configs');
 const {FORGOT_PASSWORD} = require('../configs/action_token_type.enum');
@@ -35,10 +34,6 @@ module.exports = {
                 case FORGOT_PASSWORD:
                     secretWord = JWT_PASSWORD_FORGOT_SECRET;
                     break;
-
-                // case JWT_PASSWORD_UPGRADE_SECRET:                  // TODO  цей кейс пока без потреби
-                //     secretWord = JWT_PASSWORD_UPGRADE_SECRET;
-                //     break;
             }
             await jwt.verify(token, secretWord);
         } catch (e) {

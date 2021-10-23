@@ -1,9 +1,9 @@
-const { FORGOT_PASSWORD } = require("../configs/action_token_type.enum");
+const { FORGOT_PASSWORD } = require('../configs/action_token_type.enum');
 const {User, O_Auth, ActionToken} = require('../dataBase');
 const {authValidator} = require('../validators');
 const {jwtService} = require('../service');
 const {ErrorHandler, WRONG_EMAIL_OR_PASSWORD, INVALID_TOKEN} = require('../errors');
-const {AUTHORIZATION, REFRESH, ACTION, ACCESS} = require('../configs');
+const {AUTHORIZATION, REFRESH, ACCESS} = require('../configs');
 
 module.exports = {
     isAuthValid: (req, res, next) => {
