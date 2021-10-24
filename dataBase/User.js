@@ -26,6 +26,12 @@ const userSchema = new Schema({
         type: String,
         default: userRoles.USER,
         enum: Object.values(userRoles)
+    },
+
+    is_active: {
+        type:Boolean,
+        default:false,
+        required:true
     }
 }, {timestamps: true, toObject: {virtuals: true}, toJSON: {virtuals: true}});
 

@@ -6,6 +6,7 @@ module.exports = {
 
     JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET || 'zzz',
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || 'xxx',
+    JWT_ACTION_SECRET: process.env.JWT_ACTION_SECRET || 'xxx',
     JWT_PASSWORD_FORGOT_SECRET: process.env.JWT_PASSWORD_FORGOT_SECRET || 'zzz',
     JWT_PASSWORD_UPGRADE_SECRET: process.env.JWT_PASSWORD_UPGRADE_SECRET || 'xxx',
 

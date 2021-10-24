@@ -32,4 +32,9 @@ authRouter.put(
     authMiddleware.checkActionToken,
     authController.setNewPasswordAfterForgot);
 
+authRouter.get(
+    '/activate/:token',
+    authMiddleware.checkActivateToken,
+    authController.activate);
+
 module.exports = authRouter;

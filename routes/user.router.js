@@ -7,29 +7,28 @@ const {userValidator: {createUserValidator, updateUserValidator}} = require('../
 
 router.get('/', userController.getUsers);
 
+router.get(
+    '/:user_id',
+    userMiddleware.checkById,
+    userController.getUsersById);
+
 router.post(
     '/',
     userMiddleware.isUserBodyValid(createUserValidator),
     userMiddleware.checkEmail,
     userController.createUser);
 
-
-router.get(
-    '/:user_id',
-    userMiddleware.checkById,
-    userController.getUsersById);
+router.use(authMiddleware.checkAccessToken, userMiddleware.isUserActive);
 
 router.put(
     '/:user_id',
     userMiddleware.isUserBodyValid(updateUserValidator),
-    authMiddleware.checkAccessToken,
     userMiddleware.checkById,
     userController.updateUser);
 
 router.delete(
     '/:user_id',
     userMiddleware.checkById,
-    authMiddleware.checkAccessToken,
     userMiddleware.checkRole([user_roles_enum.ADMIN]),
     userController.deleteUser);
 

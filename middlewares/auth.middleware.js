@@ -1,4 +1,4 @@
-const {User, O_Auth, ActionToken} = require('../dataBase');
+const {User, O_Auth, Action} = require('../dataBase');
 const {authValidator} = require('../validators');
 const {jwtService} = require('../service');
 const {ErrorHandler, errorMessages} = require('../errors');
@@ -98,13 +98,13 @@ module.exports = {
 
             await jwtService.verifyToken(token, action_token_type_enum.FORGOT_PASSWORD);
 
-            const tokenResponse = await ActionToken.findOne({action_token: token});
+            const tokenResponse = await Action.findOne({action_token: token});
 
             if (!tokenResponse) {
                 throw new ErrorHandler(errorMessages.INVALID_TOKEN.message, errorMessages.INVALID_TOKEN.status);
             }
 
-            await ActionToken.deleteOne({action_token: token});
+            await Action.deleteOne({action_token: token});
 
             req.user = tokenResponse.user_id;
             next();
@@ -112,4 +112,21 @@ module.exports = {
             next(e);
         }
     },
+
+    checkActivateToken: async (req, res, next) => {
+        try {
+            const {token} = req.params;
+            await jwtService.verifyToken(token, token_type_enum.ACTION);
+            const {user_id: user, _id} = await Action.findOne({token, type: token_type_enum.ACTION});
+            if (!user) {
+                throw new ErrorHandler(errorMessages.INVALID_TOKEN);
+            }
+
+            await Action.deleteOne({_id});
+            req.user = user;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
 };

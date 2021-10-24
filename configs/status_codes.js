@@ -4,4 +4,6 @@ module.exports = {
     STATUS_204: 204,
 
     STATUS_400: 400,
+
+    STATUS_200: 200,
 };

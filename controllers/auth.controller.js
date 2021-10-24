@@ -41,6 +41,18 @@ module.exports = {
         }
     },
 
+    activate: async (req, res, next) => {
+        try {
+            const {_id} = req.user;
+            await User.updateOne({_id}, {is_active: true});
+
+            res.status(status_codes.STATUS_200)
+                .json('user is active');
+        } catch (e) {
+            next(e);
+        }
+    },
+
     refreshToken: async (req, res, next) => {
         try {
             const {user, refresh_token} = req;
@@ -94,7 +106,7 @@ module.exports = {
 
             const updatePassword = await User.findByIdAndUpdate(_id, {$set: {password: hashedPassword}});
 
-            if(!updatePassword) {
+            if (!updatePassword) {
                 throw new ErrorHandler(errorMessages.USER_IS_NOT_FOUND.message, errorMessages.USER_IS_NOT_FOUND.status);
             }
             await emailService.sendMail(email, email_actions_enum.NEW_PASSWORD, {userName: name, password});

@@ -15,7 +15,7 @@ module.exports = {
 
     verifyToken: async (token, tokenType) => {
         try {
-            let secretWord;
+            let secretWord = '';
 
             switch (tokenType) {
                 case token_type_enum.ACCESS:
@@ -24,6 +24,10 @@ module.exports = {
 
                 case token_type_enum.REFRESH:
                     secretWord = config.JWT_REFRESH_SECRET;
+                    break;
+
+                case token_type_enum.ACTION:
+                    secretWord = config.JWT_ACTION_SECRET;
                     break;
 
                 case action_token_type_enum.FORGOT_PASSWORD:
@@ -48,7 +52,9 @@ module.exports = {
         }
 
         return jwt.sign({}, secretWord, {expiresIn: '24h'});
-    }
+    },
+
+    createActionToken: () => jwt.sign({}, config.JWT_ACTION_SECRET, {expiresIn: '1d'})
 };
 
 

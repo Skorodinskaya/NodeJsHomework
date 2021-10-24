@@ -57,7 +57,7 @@ module.exports = {
             const {role} = req.user;
 
             if (!roleArr.includes(role)) {
-                throw new ErrorHandler (errorMessages.ACCESS_DENIED.message, errorMessages.ACCESS_DENIED.status);
+                throw new ErrorHandler(errorMessages.ACCESS_DENIED.message, errorMessages.ACCESS_DENIED.status);
             }
 
             next();
@@ -65,6 +65,20 @@ module.exports = {
             next(e);
         }
     },
+
+    isUserActive: (req, res, next) => {
+        try {
+            const {user} = req;
+            if (!user.is_active) {
+                throw new ErrorHandler(errorMessages.USER_IS_NOT_ACTIVE.message,
+                    errorMessages.USER_IS_NOT_ACTIVE.status);
+            }
+
+            next();
+        }catch (e) {
+            next(e);
+        }
+    }
 };
 
 

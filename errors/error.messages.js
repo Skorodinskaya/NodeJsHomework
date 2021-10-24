@@ -27,5 +27,11 @@ module.exports = {
     WRONG_TEMPLATE: {
         message: 'Wrong template name',
         status: 404
-    }
+    },
+
+    USER_IS_NOT_ACTIVE: {
+        message: 'User is not active',
+        status: 404
+    },
+
 };

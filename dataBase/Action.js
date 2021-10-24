@@ -1,19 +1,16 @@
 const {Schema, model} = require('mongoose');
+const {ACTION} = require('../configs/token_type_enum');
 
-const actionEnum = require('../configs/action_token_type_enum');
-
-const actionTokenSchema = new Schema({
+const actionSchema = new Schema({
     token: {
         type: String,
         required: true,
         trim: true
     },
-
-    token_type: {
+    type: {
         type: String,
         required: true,
-        enum: Object.values(actionEnum),
-        trim: true
+        enum: Object.values(ACTION)
     },
 
     user_id: {
@@ -25,8 +22,7 @@ const actionTokenSchema = new Schema({
 
 }, {timestamps: true, toObject: {virtuals: true}, toJSON: {virtuals: true}});
 
-actionTokenSchema.pre('findOne', function() {
+actionSchema.pre('findOne', function() {
     this.populate('user_id');
 });
-
-module.exports = model('action_token', actionTokenSchema);
+module.exports = model('action', actionSchema);
