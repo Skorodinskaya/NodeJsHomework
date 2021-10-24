@@ -1,4 +1,6 @@
 module.exports = {
+    NODE_ENV: process.env.NODE_ENV || 'dev',
+
     MONGO_CONNECT_URL: process.env.MONGO_CONNCET_URL || 'mongodb://localhost:27017/june-2021',
     PORT: process.env.PORT || 5000,
 
@@ -12,5 +14,9 @@ module.exports = {
     NO_REPLY_EMAIL_PASSWORD: process.env.NO_REPLY_EMAIL_PASSWORD || 'ppp',
 
     LINK_TO_WEBSITE: process.env.LINK_TO_WEBSITE || 'ttt',
+
+    ALLOWED_ORIGIN: process.env.ALLOWED_ORIGIN || 'http://localhost:3000',
+
+    DEFAULT_PASSWORD_ADMIN: process.env.DEFAULT_PASSWORD_ADMIN || 'default password',
 };
 

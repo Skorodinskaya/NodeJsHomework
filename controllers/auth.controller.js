@@ -1,10 +1,8 @@
 const {O_Auth, ActionToken, User} = require('../dataBase');
 const {userNormalizator} = require('../util/user.util');
 const {jwtService, emailService, passwordService} = require('../service');
-const {USER_IS_NOT_FOUND, ErrorHandler, PASSWORD_CHANGED} = require('../errors');
-const {LINK_TO_WEBSITE, STATUS_204, NEW_PASSWORD} = require('../configs');
-const ActionTokenTypeEnum = require('../configs/action_token_type.enum');
-const EmailActionEnum = require('../configs/email-actions.enum');
+const {ErrorHandler, message_enum, errorMessages} = require('../errors');
+const {status_codes, config, email_actions_enum, action_token_type_enum} = require('../configs');
 
 module.exports = {
     loginController: async (req, res, next) => {
@@ -68,20 +66,20 @@ module.exports = {
             const user = req.user;
             const {email} = req.body;
 
-            const actionToken = jwtService.generateActionToken(ActionTokenTypeEnum.FORGOT_PASSWORD);
+            const actionToken = jwtService.generateActionToken(action_token_type_enum.FORGOT_PASSWORD);
 
             await ActionToken.create({
                 token: actionToken,
-                token_type: ActionTokenTypeEnum.FORGOT_PASSWORD,
+                token_type: action_token_type_enum.FORGOT_PASSWORD,
                 user_id: user._id
             });
 
             await emailService.sendMail(
                 email,
-                EmailActionEnum.FORGOT_PASSWORD,
-                {forgotPasswordUrl: LINK_TO_WEBSITE + `/passwordForgot?token=${actionToken}`});
+                email_actions_enum.FORGOT_PASSWORD,
+                {forgotPasswordUrl: config.LINK_TO_WEBSITE + `/passwordForgot?token=${actionToken}`});
 
-            res.sendStatus(STATUS_204);
+            res.sendStatus(status_codes.STATUS_204);
         } catch (e) {
             next(e);
         }
@@ -97,13 +95,13 @@ module.exports = {
             const updatePassword = await User.findByIdAndUpdate(_id, {$set: {password: hashedPassword}});
 
             if(!updatePassword) {
-                throw new ErrorHandler(USER_IS_NOT_FOUND.message, USER_IS_NOT_FOUND.status);
+                throw new ErrorHandler(errorMessages.USER_IS_NOT_FOUND.message, errorMessages.USER_IS_NOT_FOUND.status);
             }
-            await emailService.sendMail(email, NEW_PASSWORD, {userName: name, password});
+            await emailService.sendMail(email, email_actions_enum.NEW_PASSWORD, {userName: name, password});
 
             await O_Auth.deleteMany({user_id: _id});
 
-            res.json(PASSWORD_CHANGED);
+            res.json(message_enum.PASSWORD_CHANGED);
         } catch (e) {
             next(e);
         }

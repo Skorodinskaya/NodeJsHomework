@@ -1,9 +1,8 @@
-const { FORGOT_PASSWORD } = require('../configs/action_token_type.enum');
 const {User, O_Auth, ActionToken} = require('../dataBase');
 const {authValidator} = require('../validators');
 const {jwtService} = require('../service');
-const {ErrorHandler, WRONG_EMAIL_OR_PASSWORD, INVALID_TOKEN} = require('../errors');
-const {AUTHORIZATION, REFRESH, ACCESS} = require('../configs');
+const {ErrorHandler, errorMessages} = require('../errors');
+const {constants, action_token_type_enum, token_type_enum} = require('../configs');
 
 module.exports = {
     isAuthValid: (req, res, next) => {
@@ -11,7 +10,8 @@ module.exports = {
             const {error, value} = authValidator.authValidator.validate(req.body);
 
             if (error) {
-                throw new ErrorHandler(WRONG_EMAIL_OR_PASSWORD.message, WRONG_EMAIL_OR_PASSWORD.status);
+                throw new ErrorHandler(errorMessages.WRONG_EMAIL_OR_PASSWORD.message,
+                    errorMessages.WRONG_EMAIL_OR_PASSWORD.status);
             }
 
             req.body = value;
@@ -29,7 +29,8 @@ module.exports = {
             const auth = await User.findOne({email});
 
             if (!auth) {
-                throw new ErrorHandler(WRONG_EMAIL_OR_PASSWORD.message, WRONG_EMAIL_OR_PASSWORD.status);
+                throw new ErrorHandler(errorMessages.WRONG_EMAIL_OR_PASSWORD.message,
+                    errorMessages.WRONG_EMAIL_OR_PASSWORD.status);
             }
 
             req.user = auth;
@@ -41,18 +42,18 @@ module.exports = {
 
     checkAccessToken: async (req, res, next) => {
         try {
-            const token = req.get(AUTHORIZATION);
+            const token = req.get(constants.AUTHORIZATION);
 
             if (!token) {
-                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
+                throw new ErrorHandler(errorMessages.INVALID_TOKEN.message, errorMessages.INVALID_TOKEN.status);
             }
 
-            await jwtService.verifyToken(token, ACCESS);
+            await jwtService.verifyToken(token, token_type_enum.ACCESS);
 
             const tokenResponse = await O_Auth.findOne({access_token: token});
 
             if (!tokenResponse) {
-                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
+                throw new ErrorHandler(errorMessages.INVALID_TOKEN.message, errorMessages.INVALID_TOKEN.status);
             }
 
             req.user = tokenResponse.user_id;
@@ -65,18 +66,18 @@ module.exports = {
 
     checkRefreshToken: async (req, res, next) => {
         try {
-            const token = req.get(AUTHORIZATION);
+            const token = req.get(constants.AUTHORIZATION);
 
             if (!token) {
-                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
+                throw new ErrorHandler(errorMessages.INVALID_TOKEN.message, errorMessages.INVALID_TOKEN.status);
             }
 
-            await jwtService.verifyToken(token, REFRESH);
+            await jwtService.verifyToken(token, token_type_enum.REFRESH);
 
             const tokenResponse = await O_Auth.findOne({refresh_token: token});
 
             if (!tokenResponse) {
-                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
+                throw new ErrorHandler(errorMessages.INVALID_TOKEN.message, errorMessages.INVALID_TOKEN.status);
             }
 
             req.user = tokenResponse.user_id;
@@ -89,18 +90,18 @@ module.exports = {
     },
     checkActionToken: async (req, res, next) => {
         try {
-            const token = req.get(AUTHORIZATION);
+            const token = req.get(constants.AUTHORIZATION);
 
             if (!token) {
-                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
+                throw new ErrorHandler(errorMessages.INVALID_TOKEN.message, errorMessages.INVALID_TOKEN.status);
             }
 
-            await jwtService.verifyToken(token, FORGOT_PASSWORD);
+            await jwtService.verifyToken(token, action_token_type_enum.FORGOT_PASSWORD);
 
             const tokenResponse = await ActionToken.findOne({action_token: token});
 
             if (!tokenResponse) {
-                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
+                throw new ErrorHandler(errorMessages.INVALID_TOKEN.message, errorMessages.INVALID_TOKEN.status);
             }
 
             await ActionToken.deleteOne({action_token: token});

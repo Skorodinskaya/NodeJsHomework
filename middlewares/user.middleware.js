@@ -1,6 +1,6 @@
 const {User} = require('../dataBase');
-const {ErrorHandler, EMAIL_ALREADY_EXISTS, USER_IS_NOT_FOUND, ACCESS_DENIED} = require('../errors');
-const {STATUS_400} = require('../configs');
+const {ErrorHandler, errorMessages} = require('../errors');
+const {STATUS_400} = require('../configs/status_codes');
 
 module.exports = {
     checkEmail: async (req, res, next) => {
@@ -10,7 +10,7 @@ module.exports = {
             const userEmail = await User.findOne({email});
 
             if (userEmail) {
-                throw new ErrorHandler(EMAIL_ALREADY_EXISTS.message, EMAIL_ALREADY_EXISTS.status);
+                throw new ErrorHandler(errorMessages.EMAIL_ALREADY_EXISTS.message, errorMessages.EMAIL_ALREADY_EXISTS.status);
             }
 
             next();
@@ -42,7 +42,7 @@ module.exports = {
             const user = await User.findById(user_id);
 
             if (!user) {
-                throw new ErrorHandler(USER_IS_NOT_FOUND.message, USER_IS_NOT_FOUND.status);
+                throw new ErrorHandler(errorMessages.USER_IS_NOT_FOUND.message, errorMessages.USER_IS_NOT_FOUND.status);
             }
 
             req.user = user;
@@ -57,7 +57,7 @@ module.exports = {
             const {role} = req.user;
 
             if (!roleArr.includes(role)) {
-                throw new ErrorHandler (ACCESS_DENIED.message, ACCESS_DENIED.status);
+                throw new ErrorHandler (errorMessages.ACCESS_DENIED.message, errorMessages.ACCESS_DENIED.status);
             }
 
             next();

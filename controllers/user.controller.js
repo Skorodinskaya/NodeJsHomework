@@ -1,4 +1,4 @@
-const {CREATED, UPDATED, DELETED, STATUS_204, STATUS_201} = require('../configs');
+const {email_actions_enum, status_codes} = require('../configs');
 const {User} = require('../dataBase');
 const {emailService} = require('../service');
 const {userNormalizator} = require('../util/user.util');
@@ -29,13 +29,13 @@ module.exports = {
 
             const {name: userName} = req.body;
 
-            await emailService.sendMail(req.body.email, CREATED, {userName});
+            await emailService.sendMail(req.body.email, email_actions_enum.CREATED, {userName});
 
             const newUser = await User.createUserWithHashPassword(req.body);
 
             const normalizeNewUser = userNormalizator(newUser);
 
-            res.status(STATUS_201).json(normalizeNewUser);
+            res.status(status_codes.STATUS_201).json(normalizeNewUser);
         } catch (e) {
             next(e);
         }
@@ -46,12 +46,12 @@ module.exports = {
             const {user_id} = req.params;
             const {name: userName} = req.body;
 
-            await emailService.sendMail(req.user.email, UPDATED, {userName});
+            await emailService.sendMail(req.user.email, email_actions_enum.UPDATED, {userName});
 
             const user = await User.findByIdAndUpdate(user_id, {$set: {...req.body}}, {new: true});
             const normalizeNewUser = userNormalizator(user);
 
-            res.status(STATUS_201).json(normalizeNewUser);
+            res.status(status_codes.STATUS_201).json(normalizeNewUser);
         } catch (e) {
             next(e);
         }
@@ -63,11 +63,11 @@ module.exports = {
 
             const {name: userName} = req.body;
 
-            await emailService.sendMail(req.body.email, DELETED, {userName});
+            await emailService.sendMail(req.body.email, email_actions_enum.DELETED, {userName});
 
             await User.findByIdAndDelete(user_id);
 
-            res.sendStatus(STATUS_204);
+            res.sendStatus(status_codes.STATUS_204);
         } catch (e) {
             next(e);
         }

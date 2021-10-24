@@ -1,51 +1,10 @@
-const {MONGO_CONNECT_URL, PORT,
-    JWT_ACCESS_SECRET,
-    JWT_REFRESH_SECRET,
-    JWT_PASSWORD_FORGOT_SECRET,
-    JWT_PASSWORD_UPGRADE_SECRET,
-    NO_REPLY_EMAIL,
-    NO_REPLY_EMAIL_PASSWORD,
-    LINK_TO_WEBSITE,
-}= require('./config');
-const {DEFAULT_STATUS_ERR, PASSWORD_REGEXP, EMAIL_REGEXP, AUTHORIZATION} = require('./constants');
-const {ADMIN, USER, MANAGER} = require ('./user-roles.enum');
-const {ACCESS, REFRESH, ACTION} = require('./token-type.enum');
-const {CREATED, UPDATED, DELETED, NEW_PASSWORD} = require('./email-actions.enum');
-const {STATUS_201, STATUS_204, STATUS_400} = require('./status.codes');
-
 module.exports = {
-    MONGO_CONNECT_URL,
-    PORT,
-    JWT_ACCESS_SECRET,
-    JWT_REFRESH_SECRET,
-    JWT_PASSWORD_FORGOT_SECRET,
-    JWT_PASSWORD_UPGRADE_SECRET,
-    NO_REPLY_EMAIL_PASSWORD,
-    NO_REPLY_EMAIL,
-
-    LINK_TO_WEBSITE,
-
-    DEFAULT_STATUS_ERR,
-    PASSWORD_REGEXP,
-    EMAIL_REGEXP,
-    AUTHORIZATION,
-
-    USER,
-    MANAGER,
-    ADMIN,
-
-    ACCESS,
-    REFRESH,
-    ACTION,
-
-    CREATED,
-    UPDATED,
-    DELETED,
-    NEW_PASSWORD,
-
-    STATUS_201,
-    STATUS_204,
-    STATUS_400
+    config: require('./config'),
+    action_token_type_enum: require('./action_token_type_enum'),
+    constants: require('./constants'),
+    email_actions_enum: require('./email_actions_enum'),
+    status_codes: require('./status_codes'),
+    token_type_enum: require('./token_type_enum'),
+    user_roles_enum: require('./user_roles_enum')
 };
-
 

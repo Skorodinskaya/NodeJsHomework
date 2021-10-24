@@ -1,6 +1,6 @@
 const {Schema, model} = require('mongoose');
 
-const actionEnum = require('../configs/action_token_type.enum');
+const actionEnum = require('../configs/action_token_type_enum');
 
 const actionTokenSchema = new Schema({
     token: {

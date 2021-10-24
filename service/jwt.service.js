@@ -1,16 +1,11 @@
 const jwt = require('jsonwebtoken');
-const {ErrorHandler, INVALID_TOKEN} = require('../errors');
-const {JWT_ACCESS_SECRET,
-    JWT_REFRESH_SECRET,
-    ACCESS,
-    JWT_PASSWORD_FORGOT_SECRET,
-    REFRESH} = require('../configs');
-const {FORGOT_PASSWORD} = require('../configs/action_token_type.enum');
+const {ErrorHandler, errorMessages} = require('../errors');
+const {action_token_type_enum, config, token_type_enum} = require('../configs');
 
 module.exports = {
     generateTokenPair: () => {
-        const access_token = jwt.sign({}, JWT_ACCESS_SECRET, {expiresIn: '15m'});
-        const refresh_token = jwt.sign({}, JWT_REFRESH_SECRET, {expiresIn: '30d'});
+        const access_token = jwt.sign({}, config.JWT_ACCESS_SECRET, {expiresIn: '15m'});
+        const refresh_token = jwt.sign({}, config.JWT_REFRESH_SECRET, {expiresIn: '30d'});
 
         return {
             access_token,
@@ -23,21 +18,21 @@ module.exports = {
             let secretWord;
 
             switch (tokenType) {
-                case ACCESS:
-                    secretWord = JWT_ACCESS_SECRET;
+                case token_type_enum.ACCESS:
+                    secretWord = config.JWT_ACCESS_SECRET;
                     break;
 
-                case REFRESH:
-                    secretWord = JWT_REFRESH_SECRET;
+                case token_type_enum.REFRESH:
+                    secretWord = config.JWT_REFRESH_SECRET;
                     break;
 
-                case FORGOT_PASSWORD:
-                    secretWord = JWT_PASSWORD_FORGOT_SECRET;
+                case action_token_type_enum.FORGOT_PASSWORD:
+                    secretWord = config.JWT_PASSWORD_FORGOT_SECRET;
                     break;
             }
             await jwt.verify(token, secretWord);
         } catch (e) {
-            throw new ErrorHandler(INVALID_TOKEN);
+            throw new ErrorHandler(errorMessages.INVALID_TOKEN.message, errorMessages.INVALID_TOKEN.status);
         }
     },
 
@@ -45,11 +40,11 @@ module.exports = {
         let secretWord;
 
         switch (actionTokenType) {
-            case FORGOT_PASSWORD:
-                secretWord = JWT_PASSWORD_FORGOT_SECRET;
+            case action_token_type_enum.FORGOT_PASSWORD:
+                secretWord = config.JWT_PASSWORD_FORGOT_SECRET;
                 break;
             default:
-                throw new ErrorHandler(INVALID_TOKEN);
+                throw new ErrorHandler(errorMessages.INVALID_TOKEN.message, errorMessages.INVALID_TOKEN.status);
         }
 
         return jwt.sign({}, secretWord, {expiresIn: '24h'});
