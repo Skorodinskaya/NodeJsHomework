@@ -18,16 +18,18 @@ router.post(
     userMiddleware.checkEmail,
     userController.createUser);
 
-router.use(authMiddleware.checkAccessToken, userMiddleware.isUserActive);
+router.use(userMiddleware.isUserActive);
 
 router.put(
     '/:user_id',
     userMiddleware.isUserBodyValid(updateUserValidator),
+    authMiddleware.checkAccessToken,
     userMiddleware.checkById,
     userController.updateUser);
 
 router.delete(
     '/:user_id',
+    authMiddleware.checkAccessToken,
     userMiddleware.checkById,
     userMiddleware.checkRole([user_roles_enum.ADMIN]),
     userController.deleteUser);

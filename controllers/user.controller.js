@@ -37,7 +37,6 @@ module.exports = {
             await Action.create({token, type: FORGOT_PASSWORD, user_id: newUser._id});
             await emailService.sendMail(req.body.email, email_actions_enum.CREATED, {userName, token});
 
-
             const normalizeNewUser = userNormalizator(newUser);
 
             res.status(status_codes.STATUS_201).json(normalizeNewUser);

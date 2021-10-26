@@ -1,0 +1,57 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "june-2021",
+    "version": "1.0",
+    "description": "Hello, Okten",
+    "contact": {
+      "name": "Anastasiia",
+      "email": "skorodinskaya01@gmail.com"
+    }
+  },
+  "paths": {
+    "/users":{
+      "post": {
+        "tags": ["Users"],
+        "operationId": "getAllUsers",
+        "description": "This is how to create user",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "header",
+            "default": "Dimas",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "header",
+            "default": "example@gmail.com",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "header",
+            "default": "Hello_World!1",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User was created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "_id": {
+
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
