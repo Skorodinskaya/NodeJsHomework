@@ -1,7 +1,7 @@
-const {O_Auth, ActionToken, User} = require('../dataBase');
+const {O_Auth, Action, User} = require('../dataBase');
 const {userNormalizator} = require('../util/user.util');
 const {jwtService, emailService, passwordService} = require('../service');
-const {ErrorHandler, message_enum, errorMessages} = require('../errors');
+const {message_enum} = require('../errors');
 const {status_codes, config, email_actions_enum, action_token_type_enum} = require('../configs');
 
 module.exports = {
@@ -80,9 +80,9 @@ module.exports = {
 
             const actionToken = jwtService.generateActionToken(action_token_type_enum.FORGOT_PASSWORD);
 
-            await ActionToken.create({
+            await Action.create({
                 token: actionToken,
-                token_type: action_token_type_enum.FORGOT_PASSWORD,
+                type: action_token_type_enum.FORGOT_PASSWORD,
                 user_id: user._id
             });
 
@@ -104,11 +104,8 @@ module.exports = {
 
             const hashedPassword = await passwordService.hash(password);
 
-            const updatePassword = await User.findByIdAndUpdate(_id, {$set: {password: hashedPassword}});
+            await User.updateOne({_id}, {$set: {password: hashedPassword}});
 
-            if (!updatePassword) {
-                throw new ErrorHandler(errorMessages.USER_IS_NOT_FOUND.message, errorMessages.USER_IS_NOT_FOUND.status);
-            }
             await emailService.sendMail(email, email_actions_enum.NEW_PASSWORD, {userName: name, password});
 
             await O_Auth.deleteMany({user_id: _id});

@@ -73,7 +73,6 @@ module.exports = {
                 throw new ErrorHandler(errorMessages.USER_IS_NOT_ACTIVE.message,
                     errorMessages.USER_IS_NOT_ACTIVE.status);
             }
-
             next();
         }catch (e) {
             next(e);
