@@ -1,14 +1,14 @@
 const {FORGOT_PASSWORD} = require('../configs/action_token_type_enum');
 const {email_actions_enum, status_codes} = require('../configs');
 const {User, Action} = require('../dataBase');
-const {emailService, jwtService} = require('../service');
+const {emailService, jwtService, userService} = require('../service');
 const {userNormalizator} = require('../util/user.util');
 
 
 module.exports = {
     getUsers: async (req, res, next) => {
         try {
-            const users = await User.find({});
+            const users = await userService.getAllUsers(req.query);
 
             const normalizedUsers = users.map(value => userNormalizator(value));
 

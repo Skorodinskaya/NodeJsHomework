@@ -49,6 +49,21 @@
                 }
               }
             }
+          },
+          "400":{
+               "description":"Just an error",
+               "schema": {
+                    "properties":{
+                    "msg": {
+                        "type":"string",
+                        "example":"Something went wrong"
+                    },
+                    "code": {
+                    "type":"number",
+                    "example":400
+                    }
+                    }
+               }
           }
         }
       }
