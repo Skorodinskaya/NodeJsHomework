@@ -31,7 +31,7 @@ const userSchema = new Schema({
     is_active: {
         type:Boolean,
         default:false,
-        required:true
+        // required:true
     }
 }, {timestamps: true, toObject: {virtuals: true}, toJSON: {virtuals: true}});
 
