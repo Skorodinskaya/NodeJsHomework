@@ -1,4 +1,4 @@
-const {FORGOT_PASSWORD} = require('../configs/action_token_type_enum');
+const {ACTION} = require('../configs/token_type_enum');
 const {email_actions_enum, status_codes} = require('../configs');
 const {User, Action} = require('../dataBase');
 const {emailService, jwtService, userService} = require('../service');
@@ -34,7 +34,7 @@ module.exports = {
 
             const token = jwtService.createActionToken();
 
-            await Action.create({token, type: FORGOT_PASSWORD, user_id: newUser._id});
+            await Action.create({token, type: ACTION, user_id: newUser._id});
             await emailService.sendMail(req.body.email, email_actions_enum.CREATED, {userName, token});
 
             const normalizeNewUser = userNormalizator(newUser);
