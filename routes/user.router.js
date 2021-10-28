@@ -18,7 +18,7 @@ router.post(
     userMiddleware.checkEmail,
     userController.createUser);
 
-router.use(userMiddleware.isUserActive);
+// router.use(userMiddleware.isUserActive);
 
 router.put(
     '/:user_id',
