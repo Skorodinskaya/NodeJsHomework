@@ -1,4 +1,5 @@
 const {Schema, model} = require('mongoose');
+const MD = require('./ModelDefinition');
 
 const oAuthSchema = new Schema({
     access_token: {
@@ -20,7 +21,7 @@ const oAuthSchema = new Schema({
     },
 
 
-}, {timestamps: true, toObject: {virtuals: true}, toJSON: {virtuals: true}});
+},MD.gentelmenClub);
 
 oAuthSchema.pre('findOne', function() {
     this.populate('user_id');
