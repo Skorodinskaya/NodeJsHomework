@@ -2,6 +2,7 @@
   "name": "NodeJsHomework",
   "version": "1.0.0",
   "dependencies": {
+    "@sentry/node": "^6.13.3",
     "aws-sdk": "^2.1017.0",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",

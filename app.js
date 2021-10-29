@@ -12,6 +12,7 @@ const {MONGO_CONNECT_URL, PORT, ALLOWED_ORIGIN, NODE_ENV} = require('./configs/c
 const {DEFAULT_STATUS_ERR} = require('./configs/constants');
 const {defaultDataUtil} = require('./util');
 const swaggerJson = require('./docs/swagger.json');
+const Sentry = require('./logger/sentry');
 
 const app = express();
 
@@ -21,7 +22,7 @@ mongoose.connect(MONGO_CONNECT_URL).then(() => {
 
 app.use(helmet());
 app.use(cors({origin: _configureCors}));
-
+app.use(Sentry.Handlers.requestHandler());
 app.use(rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100 // limit each IP to 100 requests per windowMs
@@ -43,8 +44,13 @@ const {ErrorHandler, message_enum} = require('./errors');
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerJson));
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
+
+app.use(Sentry.Handlers.errorHandler());
+
 // eslint-disable-next-line no-unused-vars
 app.use('*', (err, req, res, next) => {
+    Sentry.captureException(err);
+
     res
         .status(err.status || DEFAULT_STATUS_ERR)
         .json({
