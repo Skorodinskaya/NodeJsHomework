@@ -34,4 +34,15 @@ module.exports = {
         status: 404
     },
 
+    NOT_SUPPORTED_FORMAT: {
+        message: 'Not supportes format',
+        status: 400
+    },
+
+    FILE_TOO_BIG: {
+        message: 'File is too big',
+        status: 400
+    }
+
+
 };

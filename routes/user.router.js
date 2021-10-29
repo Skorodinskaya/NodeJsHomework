@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const {userController} = require('../controllers');
-const {userMiddleware, authMiddleware} = require('../middlewares');
+const {userMiddleware, authMiddleware, filMiddleware} = require('../middlewares');
 const {user_roles_enum} = require('../configs');
 const {userValidator: {createUserValidator, updateUserValidator}} = require('../validators');
 
@@ -15,23 +15,24 @@ router.get(
 router.post(
     '/',
     userMiddleware.isUserBodyValid(createUserValidator),
+    filMiddleware.checkUserAvatar,
     userMiddleware.checkEmail,
     userController.createUser);
 
-// router.use(userMiddleware.isUserActive);
+router.delete(
+    '/:user_id',
+    authMiddleware.checkAccessToken,
+    userMiddleware.isUserActive,
+    userMiddleware.checkRole([user_roles_enum.ADMIN]),
+    userMiddleware.checkById,
+    userController.deleteUser);
 
 router.put(
     '/:user_id',
     userMiddleware.isUserBodyValid(updateUserValidator),
     authMiddleware.checkAccessToken,
+    userMiddleware.isUserActive,
     userMiddleware.checkById,
     userController.updateUser);
-
-router.delete(
-    '/:user_id',
-    authMiddleware.checkAccessToken,
-    userMiddleware.checkById,
-    userMiddleware.checkRole([user_roles_enum.ADMIN]),
-    userController.deleteUser);
 
 module.exports = router;

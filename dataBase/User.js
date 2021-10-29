@@ -13,13 +13,17 @@ const userSchema = new Schema({
     },
 
     is_active: {
-        type:Boolean,
-        default:false,
+        type: Boolean,
+        default: false,
         // required:true
     },
 
     age: {
         type: Number,
+    },
+
+    avatar: {
+        type: String
     }
 }, MD.gentelmenClub);
 
@@ -37,8 +41,9 @@ userSchema.statics = {
     }
 };
 
-userSchema.virtual('fullName').get(function() {
-    return `${this.name} ${this.role} How are you?`;
-});
+userSchema.virtual('fullName')
+    .get(function() {
+        return `${this.name} ${this.role} How are you?`;
+    });
 
 module.exports = model('user', userSchema);

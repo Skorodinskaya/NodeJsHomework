@@ -1,7 +1,7 @@
 const {FORGOT_PASSWORD} = require('../configs/action_token_type_enum');
 const {email_actions_enum, status_codes} = require('../configs');
 const {User, Action} = require('../dataBase');
-const {emailService, jwtService, userService} = require('../service');
+const {emailService, jwtService, userService, s3Service} = require('../service');
 const {userNormalizator} = require('../util/user.util');
 
 
@@ -30,7 +30,13 @@ module.exports = {
         try {
             const {name: userName} = req.body;
 
-            const newUser = await User.createUserWithHashPassword(req.body);
+            let newUser = await User.createUserWithHashPassword(req.body);
+
+            if (req.files && req.files.avatar) {
+                const uploadInfo = await s3Service.uploadImage(req.files.avatar, 'users', newUser._id.toString());
+
+                newUser = await User.findByIdAndUpdate(newUser._id, {avatar: uploadInfo.Location}, {new: true});
+            }
 
             const token = jwtService.createActionToken();
 
@@ -39,7 +45,8 @@ module.exports = {
 
             const normalizeNewUser = userNormalizator(newUser);
 
-            res.status(status_codes.STATUS_201).json(normalizeNewUser);
+            res.status(status_codes.STATUS_201)
+                .json(normalizeNewUser);
         } catch (e) {
             next(e);
         }
@@ -55,7 +62,8 @@ module.exports = {
             const user = await User.findByIdAndUpdate(user_id, {$set: {...req.body}}, {new: true});
             const normalizeNewUser = userNormalizator(user);
 
-            res.status(status_codes.STATUS_201).json(normalizeNewUser);
+            res.status(status_codes.STATUS_201)
+                .json(normalizeNewUser);
         } catch (e) {
             next(e);
         }
