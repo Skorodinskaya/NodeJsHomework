@@ -1,8 +1,11 @@
+const ObjectId = require('mongoose').Types.ObjectId;
 const {FORGOT_PASSWORD} = require('../configs/action_token_type_enum');
 const {email_actions_enum, status_codes} = require('../configs');
 const {User, Action} = require('../dataBase');
 const {emailService, jwtService, userService, s3Service} = require('../service');
 const {userNormalizator} = require('../util/user.util');
+const ErrorHandler = require('../errors/ErrorHandler');
+const {message_enum, errorMessages} = require('../errors');
 
 
 module.exports = {
@@ -19,8 +22,14 @@ module.exports = {
     },
 
     getUsersById: (req, res) => {
-        const user = req.user;
+        if(!ObjectId.isValid(req.params.user_id)) {
+            throw new ErrorHandler(message_enum.NOT_VALID_ID);
+        }
 
+        const user = req.user;
+        if(!user) {
+            throw new ErrorHandler(errorMessages.USER_IS_NOT_FOUND.message, errorMessages.USER_IS_NOT_FOUND.status);
+        }
         const normalizedUser = userNormalizator(user);
 
         res.json(normalizedUser);
