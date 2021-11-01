@@ -22,7 +22,7 @@ router.post(
 router.delete(
     '/:user_id',
     authMiddleware.checkAccessToken,
-    userMiddleware.isUserActive,
+    // userMiddleware.isUserActive,
     userMiddleware.checkRole([user_roles_enum.ADMIN]),
     userMiddleware.checkById,
     userController.deleteUser);
