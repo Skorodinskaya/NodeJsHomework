@@ -10,29 +10,31 @@
     }
   },
   "paths": {
-    "/users":{
+    "/users": {
       "post": {
-        "tags": ["Users"],
-        "operationId": "getAllUsers",
+        "tags": [
+          "Users"
+        ],
+        "operationId": "createUser",
         "description": "This is how to create user",
         "parameters": [
           {
             "name": "name",
-            "in": "header",
+            "in": "formData",
             "default": "Dimas",
             "required": true,
             "type": "string"
           },
           {
             "name": "email",
-            "in": "header",
+            "in": "formData",
             "default": "example@gmail.com",
             "required": true,
             "type": "string"
           },
           {
             "name": "password",
-            "in": "header",
+            "in": "formData",
             "default": "Hello_World!1",
             "required": true,
             "type": "string"
@@ -42,29 +44,132 @@
           "200": {
             "description": "User was created",
             "schema": {
-              "type": "object",
-              "properties": {
-                "_id": {
-
-                }
+              "$ref": "#/definitions/singleUser"
+            }
+          },
+          "400": {
+            "description": "Just an error",
+            "schema": {
+              "$ref": "#/definitions/commonError"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "get all users",
+        "operationId": "getAllUsers",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "This is `access_token` from POST /auth endpoint",
+            "default": "",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "number",
+            "default": 1,
+            "required": false
+          },
+          {
+            "name": "perPage",
+            "type": "number",
+            "in": "query",
+            "default": 20,
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User was created",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/singleUser"
               }
             }
           },
-          "400":{
-               "description":"Just an error",
-               "schema": {
-                    "properties":{
-                    "msg": {
-                        "type":"string",
-                        "example":"Something went wrong"
-                    },
-                    "code": {
-                    "type":"number",
-                    "example":400
-                    }
-                    }
-               }
+          "400": {
+            "description": "Something went wrong",
+            "schema": {
+              "$ref": "#/definitions/commonError"
+            }
           }
+        }
+      }
+    },
+
+    "/users/{user_id}": {
+      "get": {
+        "tags": ["Users"],
+        "operationId": "getSingleUser",
+        "description": "This is how to get one single user",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "default": "4567dfghj",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200":{
+            "description": "You got one user",
+            "schema": {
+              "$ref": "#/definitions/singleUser"
+            }
+          },
+
+          "400": {
+            "description": "Something went wrong",
+            "schema": {
+              "$ref": "#/definitions/commonError"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "singleUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "1123456xbvbn",
+          "description": "MongoDB ID"
+        },
+        "name": {
+          "type": "string",
+          "example": "Anastasiia"
+        },
+        "email": {
+          "type": "string",
+          "example": "skorodinskaya@gmail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "Hello_World1!"
+        }
+      }
+    },
+    "commonError": {
+      "type": "object",
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": "Something went wrong"
+        },
+        "code": {
+          "type": "number",
+          "example": 400
         }
       }
     }
