@@ -6,6 +6,9 @@ const fileUpload = require('express-fileupload');
 const helmet = require('helmet');
 const swaggerUi = require('swagger-ui-express');
 require('dotenv').config();
+const db = require('./dataBase/MySQL').getInstance();
+
+db.setModels();
 
 const {MONGO_CONNECT_URL, PORT, ALLOWED_ORIGIN, NODE_ENV} = require('./configs/config');
 // const startCron = require('./cron');
@@ -38,12 +41,13 @@ app.use(fileUpload({}));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-const {authRouter, userRouter} = require('./routes');
+const {authRouter, userRouter, usersMySQLRouter} = require('./routes');
 const {ErrorHandler, message_enum} = require('./errors');
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerJson));
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
+app.use('/usersMySQL', usersMySQLRouter);
 
 app.use(Sentry.Handlers.errorHandler());
 
