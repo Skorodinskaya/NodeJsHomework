@@ -14,6 +14,9 @@ module.exports = {
     NO_REPLY_EMAIL: process.env.NO_REPLY_EMAIL || 'skorodinskaya777@gmail.com',
     NO_REPLY_EMAIL_PASSWORD: process.env.NO_REPLY_EMAIL_PASSWORD || 'superuser01',
 
+    DB_USER: process.env.DB_USER || 'root',
+    DB_PASSWORD: process.env.DB_PASSWORD || 'root',
+
     LINK_TO_WEBSITE: process.env.LINK_TO_WEBSITE || 'ttt',
 
     ALLOWED_ORIGIN: process.env.ALLOWED_ORIGIN || 'http://localhost:3000',
