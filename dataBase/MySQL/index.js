@@ -40,6 +40,7 @@ module.exports = (() => {
         return {
             setModels: () => getModels(),
             getModel: (moduleName) => models[moduleName],
+            transactionInstance: () => client.transaction(),
         };
     };
 

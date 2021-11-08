@@ -24,10 +24,20 @@ module.exports = {
         return Student.findAll();
     },
 
-    createUser: (userObject) => {
+    createUser: (userObject, transaction) => {
         const Student = db.getModel('Student');
 
-        return Student.create(userObject);
+        return Student.create(userObject, {transaction});
 
+    },
+
+    updateStudent: (id, student, transaction) => {
+        const Student = db.getModel('Student');
+
+        return Student.update(student, {
+            where: {id},
+            returning: true,
+            transaction
+        });
     }
 };
